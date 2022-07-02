@@ -126,18 +126,3 @@ class ExplosiveBullets(Bullet):
     def hit_obsticle(self, game):
         self.show_particles([game.visible_sprites, game.particles], game.enemies.sprites())
         self.kill()
-
-class CircleBullet:
-    def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple,  angle: float, status: Status, damage: int, bullets_number: int) -> None:
-        self.radius_origin = based_stats['bullet_radius']
-        self.radius = 0
-        self.bullets_number = bullets_number
-        self._add_bullets(groups, based_stats, pos, angle, status, damage)   
-        
-    def _add_bullets(self, groups: list[pygame.sprite.Group],  based_stats: dict, pos: tuple, angle: float, status: Status, damage: int) -> None:
-        
-        for n in range(self.bullets_number):
-            _angle = 2*pi*n/self.bullets_number
-            x = pos[0] + cos(_angle)*self.radius_origin
-            y = pos[1] - sin(_angle)*self.radius_origin
-            Bullet(groups, based_stats, (x, y), angle, status, damage, _angle)

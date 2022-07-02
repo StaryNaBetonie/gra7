@@ -2,7 +2,7 @@ from random import randint
 import pygame
 from cooldown import Cooldown
 from settings import Status
-from bullet import Bullet, CircleBullet, OrbitBullets, ExplosiveBullets
+from bullet import Bullet, OrbitBullets, ExplosiveBullets
 from math import pi, sin, cos
 
 class Gun:
