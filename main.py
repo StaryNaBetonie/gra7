@@ -23,8 +23,8 @@ class Game:
         while self.running:
             self.clock.tick(60)
             self.current_loop.get_events()
-            self.current_loop.render()
             self.current_loop.update()
+            self.current_loop.render()
             
 if __name__ == '__main__':
     game = Game()

@@ -114,7 +114,7 @@ class Shotgun(Gun):
 
 class GildedHydra(Shotgun):
     def special_interaction(self, gameplay):
-        max_hp  = gameplay.player.player.max_hp
+        max_hp  = gameplay.player.max_hp
         current_hp = gameplay.player.hp
         self.based_stats['ammo'] = max_hp - current_hp + 1
         _reload = self.based_stats['reload_time']/self.based_stats['ammo']

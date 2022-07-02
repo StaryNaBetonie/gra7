@@ -6,13 +6,12 @@ class MenuLoop:
     def __init__(self, game) -> None:
         self.game = game
 
-        self.head_font = pygame.font.Font(None, 150)
-        self.button_font = pygame.font.Font(None, 300)
+        self.font = pygame.font.Font(None, 150)
     
-        self.play_button = Button((960, 500), 'Play', self.button_font)
-        self.exit_button = Button((960, 800), 'Exit', self.button_font)
+        self.play_button = Button((960, 500), 'Play', self.font)
+        self.exit_button = Button((960, 800), 'Exit', self.font)
 
-        self.head = self.head_font.render('enter the gungeon chinese edition', True, colors.white)
+        self.head = self.font.render('enter the gungeon chinese edition', True, colors.white)
         self.head_rect = self.head.get_rect(center = (960, 200))
 
     def render(self):
