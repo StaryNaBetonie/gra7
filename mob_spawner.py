@@ -1,5 +1,5 @@
 from random import randint, choice
-from enemy import Enemy, Boss
+from enemy import Enemy, Boss, Worm
 from settings import TILE_SIZE, RoomType, Status, opponents, bosses
 from import_item import import_item, import_items
 
@@ -30,4 +30,4 @@ class MobSpawner:
                         y = g_col.topright.place.y * 15 * TILE_SIZE + 7 * TILE_SIZE
                         boss = bosses[choice(bosses_index)]
                         guns = import_items(Status.enemy, boss['weapons'])
-                        self.boss = Boss(self.groups, (x, y), guns, boss)
+                        self.boss = Worm(self.groups, (x, y), guns, boss)

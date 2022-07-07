@@ -11,7 +11,7 @@ class GamePlay:
     def __init__(self) -> None:
         self.type = LocationType.gameplay
         self.visible_sprites = CustomCamera()
-        self.bullets = pygame.sprite.Group()
+        self.bullets = CustomCamera()
         self.enemies = pygame.sprite.Group()
         self.particles = pygame.sprite.Group()
         self.floor = CustomCamera()
@@ -41,6 +41,7 @@ class GamePlay:
     def render(self, screen):
         self.floor.custom_draw(self.player)
         self.visible_sprites.custom_draw(self.player)
+        self.bullets.custom_draw(self.player)
         self.player.gun.render(screen, self.player)
         self.ui.show_gun(self.player.gun.image_origin.copy(), screen)
         self.ui.show_gun_stats(screen, self.player.gun.damage, self.player.gun.based_stats['ammo'])
@@ -49,14 +50,6 @@ class GamePlay:
         self.ui.show_map(self.gamestate.gamestate, screen, self.player.rect)
         self.ui.show_boss_hp(screen, self.gamestate.mob_spawner.boss, self.player.rect.center)
         self.ui.reload(screen, self.player)
-    
-    def enemy_fire(self, enemy: Enemy):
-        distancex = enemy.rect.centerx-self.player.rect.centerx
-        distancey = enemy.rect.centery-self.player.rect.centery
-        if pygame.Vector2(distancex, distancey).magnitude() < 700:
-            x_start = enemy.rect.centerx + enemy.direction.x * enemy.rect.width/2
-            y_start = enemy.rect.centery + enemy.direction.y * enemy.rect.height/2
-            enemy.gun.fire([self.visible_sprites, self.bullets], (x_start, y_start), enemy.get_angle())
 
     def kill_entity(self):
         for item in self.items.sprites():
@@ -83,8 +76,8 @@ class GamePlay:
         self.bullets.update(self)
         self.gamestate.update(self.player.rect)
         self.net_group.update(self)
-
-
+        if self.gamestate.mob_spawner.boss is  None: return
+        self.gamestate.mob_spawner.boss.update(self)
 
 class CustomCamera(pygame.sprite.Group):
     def __init__(self):

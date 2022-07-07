@@ -137,7 +137,7 @@ class Player(pygame.sprite.Sprite):
         if not action: return
         x_start = self.hitbox.centerx - self.spin.x * (self.gun.image_origin.get_width())
         y_start = self.hitbox.centery - self.spin.y * (self.gun.image_origin.get_width())
-        self.gun.fire([game.visible_sprites, game.bullets], (x_start, y_start), self.get_mouse_angle())
+        self.gun.fire([game.bullets], (x_start, y_start), self.get_mouse_angle())
         
     def set_alpha(self):
         alpha = 255 if self.is_not_dodging() else 0
@@ -149,7 +149,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
     
     def set_color(self):
-        color = (0, 145, 140) if self.can_get_hit() else (255, 0, 0)
+        color = colors.cyanic if self.can_get_hit() else colors.crimson
         self.image_orig.fill(color)
     
     def cooldowns(self):
