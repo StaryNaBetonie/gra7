@@ -56,7 +56,7 @@ class UI:
     
     def show_boss_hp(self, window, boss, player_pos):
         if boss != None:
-            if pygame.Vector2(boss.rect.centerx - player_pos[0], boss.rect.centery - player_pos[1]).magnitude() <= 1000:
+            if pygame.Vector2(boss.get_pos()[0] - player_pos[0], boss.get_pos()[1] - player_pos[1]).magnitude() <= 1000:
                 place_rec = pygame.Rect(710, 950, 500, 25)
                 pygame.draw.rect(window, '#404040', place_rec)
                 multiplier = boss.hp/boss.based_stats['hp']

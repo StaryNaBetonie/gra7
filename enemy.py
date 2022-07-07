@@ -149,22 +149,22 @@ class Boss(Enemy):
             self.gun = choice(self.inventory)
 
 class WormPart(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, image) -> None:
+    def __init__(self, groups, pos: tuple, image: pygame.Surface, resistance: float) -> None:
         super().__init__(groups)
         self.object_type = ObjectType.enemy
         self.place_in_net = []
         self.next_part = None
         self.image_orig = image
-        self.image_orig.set_colorkey('black')
 
         self.image = self.image_orig.copy()
         self.rect = self.image_orig.get_rect(topleft = pos)
 
         self.hitbox = self.rect.copy().inflate(7, 7)
+        self.resistance = resistance
         self.taken_damage = 0
     
     def get_hit(self, damage):
-        self.taken_damage += damage
+        self.taken_damage += damage*self.resistance
     
     def kill_part(self):
         if self.next_part is not None:
@@ -173,7 +173,7 @@ class WormPart(pygame.sprite.Sprite):
         
     def move(self, new_x: int, new_y: int, direction_x):
         if self.next_part is not None: 
-            self.next_part.move(self.rect.centerx - direction_x * 20, self.rect.centery + self.hitbox.height, direction_x)
+            self.next_part.move(self.rect.centerx - direction_x * 20, self.rect.centery + self.hitbox.height-40, direction_x)
         self.hitbox.centerx = new_x
         self.hitbox.centery = new_y
         self.rect.center = self.hitbox.center
@@ -187,23 +187,26 @@ class Worm:
         self.notice_rad = based_stats['notice_rad']
         self.color = based_stats['color']
         self.head = self.get_snake(groups, pos)
-        self.rect = self.head.rect
         self.direction = pygame.Vector2()
         self.rotate_angle = 0
 
         self.hp = based_stats['hp']
         self.speed = based_stats['speed']
         self.can_knock = based_stats['can_knock']
+    
+    def get_pos(self):
+        return self.head.hitbox.center
 
     def get_snake(self, groups, pos):
-        head_graphics = pygame.image.load('graphics/snake/snake_head.png').convert_alpha()
-        body_graphics = pygame.image.load('graphics/snake/snake_body.png').convert_alpha()
-        tail_graphics = pygame.image.load('graphics/snake/snake_tail.png').convert_alpha()
-        head = WormPart(groups, pos, head_graphics)
+        # head_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_head.png').convert_alpha())
+        head_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_head.png').convert_alpha())
+        body_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_body.png').convert_alpha())
+        tail_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_tail.png').convert_alpha())
+        head = WormPart(groups, pos, head_graphics, 1)
         part = head
         for n in range(1, 5):
             image = body_graphics if n == 1 else tail_graphics
-            part.next_part = WormPart(groups, pos, image)
+            part.next_part = WormPart(groups, pos, image, 0.5)
             part = part.next_part
         return head
     
@@ -221,7 +224,7 @@ class Worm:
         if angle < (3*pi/2 - offset): angle = (3*pi/2 - offset)
         if angle > (3*pi/2 + offset): angle = (3*pi/2 + offset)
         self.rotate_angle = angle
-        rot = (angle*180)/3.14
+        rot = ((self.rotate_angle + pi/2)*180)/3.14
         self.head.image = pygame.transform.rotate(self.head.image_orig , rot)  
         self.head.rect = self.head.image.get_rect(center = self.head.hitbox.center) 
 
@@ -283,8 +286,8 @@ class Worm:
     def create_attack(self, game):
         _distance = (Vector2(self.head.hitbox.center) - Vector2(game.player.hitbox.center)).magnitude()
         if _distance >= self.notice_rad: return
-        qx = self.head.hitbox.centerx
-        qy = self.head.hitbox.centery + self.head.hitbox.width/2 - 100
+        qx = self.head.hitbox.centerx + self.head.hitbox.width//2*cos(self.rotate_angle)
+        qy = self.head.hitbox.centery - (self.head.hitbox.height//2 - 50)*sin(self.rotate_angle)
         self.gun.fire([game.bullets], (qx, qy), self.get_angle())
 
     def reload(self):
@@ -293,7 +296,7 @@ class Worm:
             self.gun = choice(self.inventory)
         
     def update(self, game):
-        # self.rotate()
+        self.rotate()
         self.create_attack(game)
         self.get_direction(game.player.hitbox.center)
         self.move_logic(game)

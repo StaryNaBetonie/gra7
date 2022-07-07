@@ -4,13 +4,13 @@ from settings import TILE_SIZE, RoomType, Status, opponents, bosses
 from import_item import import_item, import_items
 
 class MobSpawner:
-    def __init__(self, gamestate, groups, stage_number) -> None:
+    def __init__(self, gamestate, stage_number) -> None:
         self.gamestate = gamestate
-        self.groups = groups
+        self.groups = [self.gamestate.groups['enemies'], self.gamestate.groups['visible']]
         self.stage_number = stage_number
     
     def spawn(self, opponents_index: list[int], bosses_index: list[int]) -> None:
-        for g_row in self.gamestate:
+        for g_row in self.gamestate.gamestate:
             for g_col in g_row:
                 if g_col is not None:
                     if g_col.room_type == RoomType.normal:

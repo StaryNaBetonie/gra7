@@ -31,7 +31,7 @@ class Gamestate:
         self.add_special_room(3, self._chest, RoomType.chest)
         self.import_rooms()
         
-        self.mob_spawner = MobSpawner(self.gamestate, [self.groups['visible'], self.groups['enemies']], self.stage_number)
+        self.mob_spawner = MobSpawner(self, self.stage_number)
     
     def _import_levels(self, state_type: str) -> None:
         path = f'levels/{state_type}/'
@@ -68,7 +68,7 @@ class Gamestate:
     def kill_boss(self, groups):
         if self.mob_spawner.boss is not None:
             if self.mob_spawner.boss.hp <= 0:
-                RaiseableItem(groups, self.mob_spawner.boss.rect.center)
+                RaiseableItem(groups, self.mob_spawner.boss.get_pos())
                 self.mob_spawner.boss = None
 
 
