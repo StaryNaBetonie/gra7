@@ -87,7 +87,7 @@ class colors:
     cyanic = '#00918c'
     dark_brown = '#25131a'
     seaweed_green = '#090716'
-    blue_gray = '#202428'
+    blue_gray = '#1d1d21'
 
 bullets = [
     # player

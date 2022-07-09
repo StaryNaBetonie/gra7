@@ -33,10 +33,11 @@ class Gamestate:
         self.mob_spawner = MobSpawner(self, self.stage_number)
     
     def new_tile_list(self) -> list:
+        tile_size = (TILE_SIZE, TILE_SIZE)
         path = f'graphics/levels/{self.name}/'
-        blank_tile = pygame.Surface((64, 64))
+        blank_tile = pygame.Surface(tile_size)
         blank_tile.fill(self.key_color)
-        tile_list = import_cut_graphicks(path+'walls.png')
+        tile_list = import_cut_graphicks(path+'walls.png', tile_size)
         tile_list.append(blank_tile)
         return tile_list
     

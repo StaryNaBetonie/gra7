@@ -23,9 +23,9 @@ def import_folder(path):
             surface_list.append(image_surface)
     return surface_list
 
-def import_cut_graphicks(path):
+def import_cut_graphicks(path, size):
     surface = pygame.transform.scale2x(pygame.image.load(path))
-    size_x, size_y = TILE_SIZE, TILE_SIZE
+    size_x, size_y = size
     tile_num_x = int(surface.get_size()[0] // size_x)
     tile_num_y = int(surface.get_size()[1] // size_y)
 

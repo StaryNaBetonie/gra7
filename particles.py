@@ -37,8 +37,7 @@ class StaticParticle(pygame.sprite.Sprite):
         self.animation_index = 0
     
     def animate(self):
-        if self.animation_index > len(self.graphics)-1:
-            self.kill()
+        if self.animation_index > len(self.graphics) - 1: self.kill()
         self.animation_index += self.animation_speed
         self.image = self.graphics[int(self.animation_index)]
 
