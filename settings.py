@@ -183,7 +183,7 @@ weapon_names = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18]
 
 stage_data = [
     {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': [0]},
-    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': [1]},
     {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': [2]},
+    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': [1]},
 ]
 

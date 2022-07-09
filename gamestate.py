@@ -15,11 +15,10 @@ class Gamestate:
         self.groups['walls'] = self.walls
         self.name = state_data['name']
 
-        path = f'graphics/levels/{self.name}/'
-        self.walls_graphics = import_cut_graphicks(path+'walls.jpg', (TILE_SIZE, TILE_SIZE))
-        self.floor_graphics = pygame.image.load(path+'floor.jpg')
-        self._import_levels(self.name)
         self.key_color = state_data['key_color']
+        self.walls_graphics = self.new_tile_list()
+        self.floor_graphics = self.import_floor_graphic()
+        self._import_levels(self.name)
         
         self.stage_number = stage_number
         self.gamestate = [[None]*15 for i in range(15)]
@@ -32,6 +31,18 @@ class Gamestate:
         self.import_rooms()
         
         self.mob_spawner = MobSpawner(self, self.stage_number)
+    
+    def new_tile_list(self) -> list:
+        path = f'graphics/levels/{self.name}/'
+        blank_tile = pygame.Surface((64, 64))
+        blank_tile.fill(self.key_color)
+        tile_list = import_cut_graphicks(path+'walls.png')
+        tile_list.append(blank_tile)
+        return tile_list
+    
+    def import_floor_graphic(self):
+        path = f'graphics/levels/{self.name}/floor.jpg'
+        return pygame.image.load(path)
     
     def _import_levels(self, state_type: str) -> None:
         path = f'levels/{state_type}/'

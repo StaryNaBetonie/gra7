@@ -198,7 +198,6 @@ class Worm:
         return self.head.hitbox.center
 
     def get_snake(self, groups, pos):
-        # head_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_head.png').convert_alpha())
         head_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_head.png').convert_alpha())
         body_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_body.png').convert_alpha())
         tail_graphics = pygame.transform.scale2x(pygame.image.load('graphics/snake/snake_tail.png').convert_alpha())

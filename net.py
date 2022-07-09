@@ -33,8 +33,17 @@ class NetGroup:
             for y in range(y_idexes_number):
                 x_index = left_index + x
                 y_index = top_index + y
-                object.place_in_net.append((x_index, y_index))
-                self.net[y_index][x_index].append(object)
+                if self.debug(object, x_index, y_index):
+                    object.place_in_net.append((x_index, y_index))
+                    self.net[y_index][x_index].append(object)
+    
+    def debug(self, object, x_index, y_index) -> bool:
+        net_size = len(self.net) - 1
+        if x_index > net_size or y_index > net_size:
+            object.kill()
+            print('obiekt został zdezintegrowany')
+            return False
+        return True
     
     def add_list(self, list):
         for obj in list:

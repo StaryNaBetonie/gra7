@@ -42,28 +42,28 @@ class Room:
         y = self.place.y * 15*TILE_SIZE
         for border in self.border:
             if border == Border.top:
-                index_list = [1, 2, 3, 4]
+                index_list = [1, 2]
                 Tile(groups, (x+7*TILE_SIZE, y), self.walls[choice(index_list)])
                 for i in range(1, 5):
                     Tile(groups, (x +(7-i)*TILE_SIZE, y), self.walls[choice(index_list)])
                     Tile(groups, (x +(7+i)*TILE_SIZE, y), self.walls[choice(index_list)])
                 
             if border == Border.bottom:
-                index_list = [25, 26, 27, 28, 31, 32]
+                index_list = [13, 14]
                 Tile(groups, (x+7*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
                     Tile(groups, (x +(7-i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
                     Tile(groups, (x +(7+i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
 
             if border == Border.left:
-                index_list = [0, 6, 12, 18]
+                index_list = [4, 8]
                 Tile(groups, (x, y+7*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
                     Tile(groups, (x, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)])
                     Tile(groups, (x, y+(7+i)*TILE_SIZE), self.walls[choice(index_list)])
 
             if border == Border.right:
-                index_list = [5, 11, 17, 23]
+                index_list = [7, 11]
                 Tile(groups, (x+14*TILE_SIZE, y+7*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
                     Tile(groups, (x+14*TILE_SIZE, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)])
@@ -72,14 +72,17 @@ class Room:
         
         if not self.room_type == RoomType.boss:
             if not Border.bottom in self.border:
-                Tile(groups, (x+3*TILE_SIZE, y+14*TILE_SIZE), self.walls[33])
-                Tile(groups, (x+11*TILE_SIZE, y+14*TILE_SIZE), self.walls[30])
+                Tile(groups, (x+3*TILE_SIZE, y+14*TILE_SIZE), self.walls[6])
+                Tile(groups, (x+11*TILE_SIZE, y+14*TILE_SIZE), self.walls[5])
             if not Border.left in self.border:
-                Tile(groups, (x, y+3*TILE_SIZE), self.walls[1])
-                Tile(groups, (x, y+11*TILE_SIZE), self.walls[33])
+                Tile(groups, (x, y+3*TILE_SIZE), self.walls[10])
+                Tile(groups, (x, y+11*TILE_SIZE), self.walls[6])
             if not Border.right in self.border:
-                Tile(groups, (x+14*TILE_SIZE, y+3*TILE_SIZE), self.walls[1])
-                Tile(groups, (x+14*TILE_SIZE, y+11*TILE_SIZE), self.walls[30])
+                Tile(groups, (x+14*TILE_SIZE, y+3*TILE_SIZE), self.walls[9])
+                Tile(groups, (x+14*TILE_SIZE, y+11*TILE_SIZE), self.walls[5])
+            if not Border.top in self.border:
+                Tile(groups, (x+3*TILE_SIZE, y), self.walls[10])
+                Tile(groups, (x+11*TILE_SIZE, y), self.walls[9])
             
     def delete_room(self):
         for row in self.tiles:
