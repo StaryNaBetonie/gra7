@@ -1,6 +1,7 @@
 from csv import reader
 import pygame
 from os import walk
+from random import randint
 
 from settings import TILE_SIZE
 

@@ -55,13 +55,14 @@ class NetGroup:
         self.add_list(game.bullets.sprites())
         self.add_list(game.enemies.sprites())
         self.add_list(game.items.sprites())
+        self.add_list(game.chests.sprites())
 
-    def query(self, object):
+    def query(self, object, hitbox):
         ret_arr = []
         for place in object.place_in_net:
             x_index, y_index = place
             for obj in self.net[y_index][x_index]:
-                if object.hitbox.colliderect(obj.hitbox):
+                if hitbox.colliderect(obj.hitbox):
                     if obj != object:
                         ret_arr.append(obj)
         return ret_arr

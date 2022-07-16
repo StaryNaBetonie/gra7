@@ -47,15 +47,16 @@ class Bullet(pygame.sprite.Sprite):
         self.speed += self.acceleration
 
     def actions(self, game):
-        if game.static_objects.query(self):
+        if game.static_objects.query(self, self.hitbox):
             self.hit_obsticle(game)
+        obsticles = game.net_group.query(self, self.hitbox)
         if self.status == Status.player:
-            for _object in game.net_group.query(self):
+            for _object in obsticles:
                 if _object.object_type == ObjectType.enemy:
                     self.hit_obsticle(game)
                     _object.get_hit(self.damage)
         elif self.status == Status.enemy:
-            for _object in game.net_group.query(self):
+            for _object in obsticles:
                 if _object.object_type == ObjectType.player:
                     if _object.is_not_dodging():
                         self.hit_obsticle(game)

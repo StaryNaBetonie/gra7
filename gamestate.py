@@ -1,28 +1,28 @@
 import pygame
 from random import randint, choice
 from room import Room, MainRooms, BossRoom
-from settings import RoomType, Border, TILE_SIZE
+from settings import RoomType, Border, TILE_SIZE, stage_data
 from mob_spawner import MobSpawner
 from tile import Tile
 from raiseable import RaiseableItem
 from support import import_cut_graphicks, import_csv_layout
 
 class Gamestate:
-    def __init__(self, stage_number: int, state_data: dict, **groups: dict) -> None:
-    
-        self.walls = pygame.sprite.Group()
-        self.groups = groups
-        self.groups['walls'] = self.walls
-        self.name = state_data['name']
+    def __init__(self, gameplay) -> None:
 
-        self.key_color = state_data['key_color']
+        self.gameplay = gameplay
+        self.stage_number = self.gameplay.stage_number%3
+        self.state_data = stage_data[self.stage_number]
+        self.name = self.state_data['name']
+        self.key_color = self.state_data['key_color']
+
         self.walls_graphics = self.new_tile_list()
         self.floor_graphics = self.import_floor_graphic()
         self._import_levels(self.name)
         
-        self.stage_number = stage_number
         self.gamestate = [[None]*15 for i in range(15)]
         self.gamestate[7][7] = MainRooms(self._enter, (7, 7), RoomType._enter, self.walls_graphics)
+
         self.add_map()
         self.add_border()
         self.add_special_room(3, self._exit, RoomType._exit)
@@ -42,8 +42,13 @@ class Gamestate:
         return tile_list
     
     def import_floor_graphic(self):
-        path = f'graphics/levels/{self.name}/floor.jpg'
-        return pygame.image.load(path)
+        path = f'graphics/levels/{self.name}/floor.png'
+        floor_image = import_cut_graphicks(path, (TILE_SIZE, TILE_SIZE))
+        floor = pygame.Surface((15*TILE_SIZE, 15*TILE_SIZE))
+        for col in range(15):
+            for row in range(15):
+                floor.blit(choice(floor_image), (row*TILE_SIZE, col*TILE_SIZE))
+        return floor
     
     def _import_levels(self, state_type: str) -> None:
         path = f'levels/{state_type}/'
@@ -118,33 +123,32 @@ class Gamestate:
         return self.gamestate[7][7].set_player(self._enter['player'])
     
     def add_point(self, x, y, gamestate):
-        n = 0
+        points_number = 0
         if randint(1, 3) == 1:
-            n += 1
+            points_number += 1
             if self.gamestate[x][y] is None:
                 gamestate[x][y] = Room(choice(self.levels), (x, y), RoomType.normal, self.walls_graphics)
-        return n
+        return points_number
+    
+    def add_point_logic(self, room):
+        if room is None: return False
+        if room.status is False: return False
+        return True
     
     def add_points(self):
         new_gamestate = self.gamestate.copy()
-        n = 0
+        points_number = 0
 
         for row_index, row in enumerate(self.gamestate):
             for col_index, col in enumerate(row):
-                if col is not None:
-                    if col.status is True:
-                        if col.room_type is not RoomType._enter:
-                            col.status = False
-                        if row_index is not 0:
-                            n += self.add_point(row_index-1, col_index, new_gamestate)
-                        if row_index is not 13:
-                            n += self.add_point(row_index+1, col_index, new_gamestate)
-                        if col_index is not 0:
-                            n += self.add_point(row_index, col_index-1, new_gamestate)
-                        if col_index is not 12:
-                            n += self.add_point(row_index, col_index+1, new_gamestate)
+                if self.add_point_logic(col):
+                    if col.room_type is not RoomType._enter: col.status = False
+                    if row_index > 0: points_number += self.add_point(row_index-1, col_index, new_gamestate)
+                    if row_index < 13: points_number += self.add_point(row_index+1, col_index, new_gamestate)
+                    if col_index > 0: points_number += self.add_point(row_index, col_index-1, new_gamestate)
+                    if col_index < 12: points_number += self.add_point(row_index, col_index+1, new_gamestate)
         self.gamestate = new_gamestate
-        return n
+        return points_number
 
     def add_special_room(self, number, level, type):
         rooms = []
@@ -201,10 +205,10 @@ class Gamestate:
             for col in row:
                 if col is not None:
                     if not col.room_type == RoomType.boss:
-                        col.add_border([self.groups['visible'], self.groups['walls']])
-                    col.room = col.import_room(self.groups, self.floor_graphics)
+                        col.add_border([self.gameplay.visible_sprites, self.gameplay.walls])
+                    col.room = col.import_room(self.gameplay, self.floor_graphics)
                     if col.room_type == RoomType._exit:
-                        self.exit = Tile([self.groups['visible']], col.set_player(self._exit['exit']), pygame.image.load('graphics/stairs.jpg'))
+                        self.exit = Tile([self.gameplay.visible_sprites], col.set_player(self._exit['exit']), pygame.image.load('graphics/stairs.jpg'))
 
     
     def update(self, player):
@@ -214,6 +218,6 @@ class Gamestate:
                     col.set_active(player)
     
     def delete_gamestate(self):
+        for wall in self.gameplay.walls: wall.kill()
+        for chest in self.gameplay.chests: chest.kill()
         self.exit.kill()
-        for wall in self.walls:
-            wall.kill()

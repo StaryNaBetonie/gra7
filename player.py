@@ -38,6 +38,16 @@ class Player(pygame.sprite.Sprite):
         self.speed = 6
 
         self.hitbox = self.rect.copy()
+        self.interaction_hitbox = self.rect.copy().inflate(10, 10)
+    
+    def interact_with_objects(self, game):
+        objects = game.net_group.query(self, self.interaction_hitbox)
+        for _object in objects:
+            if _object.object_type == ObjectType.raisable:
+                self.add_item(_object.item)
+                _object.kill()
+            if _object.object_type == ObjectType.chest:
+                _object.open(game)
     
     def get_hit(self):
         if not self.can_get_hit(): return
@@ -99,27 +109,20 @@ class Player(pygame.sprite.Sprite):
     
     def move(self, game):
         if self.direction.magnitude() != 0: self.direction.normalize()
-        self.collision(game)
         self.hitbox.centerx += self.direction.x * self.speed
         self.wall_collision(Direction.horizontal, game)
         self.hitbox.centery += self.direction.y * self.speed
         self.wall_collision(Direction.vertical, game)
         self.dodge_direction = self.direction
         self.rect.center = self.hitbox.center
-    
-    def collision(self, game):
-        objects = game.net_group.query(self)
-        for _object in objects:
-            if _object.object_type == ObjectType.raisable:
-                self.add_item(_object.item)
-                _object.kill()
+        self.interaction_hitbox.center = self.hitbox.center
         
         if self.hitbox.colliderect(game.gamestate.exit.rect):
             if game.gamestate.mob_spawner.boss is None:
                 game.new_level()
     
     def wall_collision(self, direction, game):
-        collision_objects = game.static_objects.query(self)
+        collision_objects = game.static_objects.query(self, self.hitbox)
         for _object in collision_objects:
             if direction == Direction.horizontal:
                 if self.direction.x > 0:

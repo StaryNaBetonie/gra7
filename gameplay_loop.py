@@ -40,8 +40,10 @@ class GameplyLoop:
                     self.gameplay.player.gun.reload()
                 if event.key == pygame.K_2:
                     self.gameplay.player.change_item_slot(True)
-                if event.key == pygame .K_1:
+                if event.key == pygame.K_1:
                     self.gameplay.player.change_item_slot(False)
+                if event.key == pygame.K_e:
+                    self.gameplay.player.interact_with_objects(self.gameplay)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     self.gameplay.actions['up'] = False

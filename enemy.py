@@ -67,9 +67,9 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = self.hitbox.center
     
     def collision(self, direction, obsticles):
-        collision_objects = obsticles.query(self)
+        collision_objects = obsticles.query(self, self.hitbox)
         for _object in collision_objects:
-            if _object.object_type == ObjectType.wall or _object.object_type == ObjectType.enemy:
+            if _object.object_type in [ObjectType.wall, ObjectType.enemy, ObjectType.chest]:
                 if direction == Direction.horizontal:
                     if self.direction.x > 0:
                         self.hitbox.right = _object.hitbox.left
@@ -89,7 +89,7 @@ class Enemy(pygame.sprite.Sprite):
 
         _distance = int(Vector2(dx, dy).magnitude())
         
-        if _distance in range(300, self.notice_rad):
+        if _distance in range(300, self.notice_rad) or self.acceleration != 0:
             self.move(game)
         
     def get_hit(self, damage):
@@ -235,7 +235,7 @@ class Worm:
         self.head.move(new_x, new_y, self.direction.x)
     
     def collision(self, direction, obsticles):
-        collision_objects = obsticles.query(self.head)
+        collision_objects = obsticles.query(self.head, self.head.hitbox)
         for _object in collision_objects:
             if _object.object_type == ObjectType.wall:
                 if direction == Direction.horizontal:

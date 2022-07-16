@@ -15,7 +15,9 @@ class GamePlay:
         self.enemies = pygame.sprite.Group()
         self.particles = pygame.sprite.Group()
         self.floor = CustomCamera()
-        self.items = pygame.sprite.Group()
+        self.items = CustomCamera()
+        self.walls = pygame.sprite.Group()
+        self.chests = pygame.sprite.Group()
         self.net_group = NetGroup()
         self.static_objects = NetGroup()
         
@@ -34,13 +36,14 @@ class GamePlay:
     def new_gamestate(self):
         _stage_data = stage_data[self.stage_number%3]
         self.static_objects.clear()
-        self.gamestate = Gamestate(self.stage_number, _stage_data , visible=self.visible_sprites, enemies=self.enemies, items=self.items, floor=self.floor)
-        self.static_objects.add_list(self.gamestate.walls.sprites())
+        self.gamestate = Gamestate(self)
+        self.static_objects.add_list(self.walls.sprites())
         self.gamestate.mob_spawner.spawn(_stage_data['opponents'], _stage_data['bosses'])
 
     def render(self, screen):
         self.floor.custom_draw(self.player)
         self.visible_sprites.custom_draw(self.player)
+        self.items.custom_draw(self.player)
         self.bullets.custom_draw(self.player)
         self.player.gun.render(screen, self.player)
         self.ui.show_gun(self.player.gun.image_origin.copy(), screen)

@@ -2,7 +2,7 @@ import pygame
 from settings import TILE_SIZE, ObjectType
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, surface=pygame.Surface((TILE_SIZE, TILE_SIZE))) -> None:
+    def __init__(self, groups, pos, surface, alpha = 255) -> None:
         super().__init__(groups)
         self.object_type = ObjectType.wall
         self.can_move = False

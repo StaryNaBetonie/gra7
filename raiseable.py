@@ -12,4 +12,4 @@ class RaiseableItem(pygame.sprite.Sprite):
         self.item_type = self.item.item_type
         self.image = self.item.image_origin.copy()
         self.rect = self.image.get_rect(center = pos)
-        self.hitbox = self.rect
+        self.hitbox = self.rect.copy()

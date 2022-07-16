@@ -6,7 +6,7 @@ from import_item import import_item, import_items
 class MobSpawner:
     def __init__(self, gamestate, stage_number) -> None:
         self.gamestate = gamestate
-        self.groups = [self.gamestate.groups['enemies'], self.gamestate.groups['visible']]
+        self.groups = [gamestate.gameplay.enemies, gamestate.gameplay.visible_sprites]
         self.stage_number = stage_number
     
     def spawn(self, opponents_index: list[int], bosses_index: list[int]) -> None:
