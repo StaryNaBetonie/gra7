@@ -11,13 +11,13 @@ class GamePlay:
     def __init__(self) -> None:
         self.type = LocationType.gameplay
         self.visible_sprites = CustomCamera()
-        self.bullets = CustomCamera()
+        self.bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.particles = pygame.sprite.Group()
-        self.floor = CustomCamera()
-        self.items = CustomCamera()
+        self.items = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.chests = pygame.sprite.Group()
+        self.floor = pygame.sprite.Group()
         self.net_group = NetGroup()
         self.static_objects = NetGroup()
         
@@ -41,10 +41,7 @@ class GamePlay:
         self.gamestate.mob_spawner.spawn(_stage_data['opponents'], _stage_data['bosses'])
 
     def render(self, screen):
-        self.floor.custom_draw(self.player)
         self.visible_sprites.custom_draw(self.player)
-        self.items.custom_draw(self.player)
-        self.bullets.custom_draw(self.player)
         self.player.gun.render(screen, self.player)
         self.ui.show_gun(self.player.gun.image_origin.copy(), screen)
         self.ui.show_gun_stats(screen, self.player.gun.damage, self.player.gun.based_stats['ammo'])
@@ -95,7 +92,7 @@ class CustomCamera(pygame.sprite.Group):
         self.offset.y = player.rect.centery - self.half_heigth
         player.on_screen = pygame.math.Vector2(self.half_width, self.half_heigth)
 
-        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
+        for sprite in sorted(self.sprites(), key = lambda sprite: (sprite._layer, sprite.rect.centery)):
             offset_pos = sprite.rect.topleft - self.offset
             x = sprite.rect.centerx-player.hitbox.centerx
             y = sprite.rect.centery-player.hitbox.centery

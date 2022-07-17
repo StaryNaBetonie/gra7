@@ -1,11 +1,11 @@
 import pygame
 from random import randint, choice
 from room import Room, MainRooms, BossRoom
-from settings import RoomType, Border, TILE_SIZE, stage_data
+from settings import ObjectType, RoomType, Border, TILE_SIZE, stage_data
 from mob_spawner import MobSpawner
 from tile import Tile
 from raiseable import RaiseableItem
-from support import import_cut_graphicks, import_csv_layout
+from support import import_cut_graphicks, import_csv_layout, import_graphics
 
 class Gamestate:
     def __init__(self, gameplay) -> None:
@@ -208,7 +208,10 @@ class Gamestate:
                         col.add_border([self.gameplay.visible_sprites, self.gameplay.walls])
                     col.room = col.import_room(self.gameplay, self.floor_graphics)
                     if col.room_type == RoomType._exit:
-                        self.exit = Tile([self.gameplay.visible_sprites], col.set_player(self._exit['exit']), pygame.image.load('graphics/stairs.jpg'))
+                        groups = [self.gameplay.visible_sprites]
+                        place = col.set_player(self._exit['exit'])
+                        image = import_graphics('graphics/stairs.png')
+                        self.exit = Tile(groups, place, image, ObjectType.stairs, 0)
 
     
     def update(self, player):

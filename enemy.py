@@ -4,28 +4,16 @@ from gun import Gun
 from settings import Direction, ObjectType, colors
 from math import atan, pi, sin, cos
 from random import choice
+from support import get_surface
+from tile import Tile
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, gun: Gun, based_stats: dict) -> None:
-        super().__init__(groups)
-        self.object_type = ObjectType.enemy
-        self.can_move = True
-        self.place_in_net = []
-
+        super().__init__(groups, pos, get_surface(based_stats['size'], based_stats['color']), ObjectType.enemy, 0, (7, 7))
         self.based_stats = based_stats
 
         self.gun = gun
         self.notice_rad = based_stats['notice_rad']
-
-        self.color = based_stats['color']
-        self.image_orig = pygame.Surface(self.based_stats['size'])
-        self.image_orig.set_colorkey('black')
-        self.image_orig.fill(self.color)
-
-        self.image = self.image_orig.copy()
-        self.rect = self.image_orig.get_rect(topleft = pos)
-
-        self.hitbox = self.rect.copy().inflate(7, 7)
 
         self.direction = Vector2(0, 0)
         self.acceleration = 0
@@ -45,7 +33,7 @@ class Enemy(pygame.sprite.Sprite):
     def rotate(self):
         old_center = self.rect.center   
         rot = (self.get_angle()*180)/3.14
-        self.image = pygame.transform.rotate(self.image_orig , rot)  
+        self.image = pygame.transform.rotate(self.image_origin , rot)  
         self.rect = self.image.get_rect()  
         self.rect.center = old_center 
 
@@ -105,7 +93,7 @@ class Enemy(pygame.sprite.Sprite):
         if _distance >= self.notice_rad: return
         qx = self.rect.centerx + self.direction.x*self.rect.width/2
         qy = self.rect.centery + self.direction.y*self.rect.width/2
-        self.gun.fire([game.bullets], (qx, qy), self.get_angle())
+        self.gun.fire([game.bullets, game.visible_sprites], (qx, qy), self.get_angle())
     
     def reload(self):
         if self.gun.current_ammo <= 0:
@@ -148,18 +136,10 @@ class Boss(Enemy):
             self.gun.reload()
             self.gun = choice(self.inventory)
 
-class WormPart(pygame.sprite.Sprite):
+class WormPart(Tile):
     def __init__(self, groups, pos: tuple, image: pygame.Surface, resistance: float) -> None:
-        super().__init__(groups)
-        self.object_type = ObjectType.enemy
-        self.place_in_net = []
+        super().__init__(groups, pos, image, ObjectType.enemy, 0, (7, 7))
         self.next_part = None
-        self.image_orig = image
-
-        self.image = self.image_orig.copy()
-        self.rect = self.image_orig.get_rect(topleft = pos)
-
-        self.hitbox = self.rect.copy().inflate(7, 7)
         self.resistance = resistance
         self.taken_damage = 0
     
@@ -224,7 +204,7 @@ class Worm:
         if angle > (3*pi/2 + offset): angle = (3*pi/2 + offset)
         self.rotate_angle = angle
         rot = ((self.rotate_angle + pi/2)*180)/3.14
-        self.head.image = pygame.transform.rotate(self.head.image_orig , rot)  
+        self.head.image = pygame.transform.rotate(self.head.image_origin, rot)  
         self.head.rect = self.head.image.get_rect(center = self.head.hitbox.center) 
 
     def move(self, game):
@@ -287,7 +267,7 @@ class Worm:
         if _distance >= self.notice_rad: return
         qx = self.head.hitbox.centerx + self.head.hitbox.width//2*cos(self.rotate_angle)
         qy = self.head.hitbox.centery - (self.head.hitbox.height//2 - 50)*sin(self.rotate_angle)
-        self.gun.fire([game.bullets], (qx, qy), self.get_angle())
+        self.gun.fire([game.bullets, game.visible_sprites], (qx, qy), self.get_angle())
 
     def reload(self):
         if self.gun.current_ammo <= 0:

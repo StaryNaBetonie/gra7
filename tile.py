@@ -1,14 +1,13 @@
 import pygame
-from settings import TILE_SIZE, ObjectType
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, surface, alpha = 255) -> None:
+    def __init__(self, groups, pos, surface, object_type, layer, hitbox_offset = (0, -10)) -> None:
         super().__init__(groups)
-        self.object_type = ObjectType.wall
-        self.can_move = False
+        self._layer = layer
+        self.object_type = object_type
         self.place_in_net = []
-
+    
+        self.image_origin = surface
         self.image = surface
         self.rect = self.image.get_rect(topleft = pos)
-
-        self.hitbox = self.rect.copy().inflate(0, -10)
+        self.hitbox = self.rect.copy().inflate(hitbox_offset)

@@ -5,14 +5,12 @@ from settings import Direction, ItemType, ObjectType, colors
 from inventory import Inventory
 from random import randint
 from cooldown import Cooldown
+from tile import Tile
+from support import get_surface
 
-class Player(pygame.sprite.Sprite):
+class Player(Tile):
     def __init__(self, groups, pos) -> None:
-        super().__init__(groups)
-        self.object_type = ObjectType.player
-        self.can_move = False
-        self.place_in_net = []
-
+        super().__init__(groups, pos, get_surface((40, 40), colors.cyanic), ObjectType.player, 0)
         self.on_screen = Vector2(0, 0)
 
         self.inventory = Inventory()
@@ -22,22 +20,14 @@ class Player(pygame.sprite.Sprite):
         self.max_hp = 30
         self.hp = self.max_hp
 
-        self.image_orig = pygame.Surface((40 , 40))  
-        self.image_orig.set_colorkey(colors.black)  
-        self.image_orig.fill(colors.cyanic)
-
         self.can_get_hit = Cooldown(100)
         self.is_not_dodging = Cooldown(200)
         self.can_make_dodge = Cooldown(700)
         self.dodge_direction = pygame.math.Vector2()
 
-        self.image = self.image_orig.copy()
-        self.rect = self.image_orig.get_rect(center = pos)  
-
         self.direction = Vector2()
         self.speed = 6
 
-        self.hitbox = self.rect.copy()
         self.interaction_hitbox = self.rect.copy().inflate(10, 10)
     
     def interact_with_objects(self, game):
@@ -85,7 +75,7 @@ class Player(pygame.sprite.Sprite):
     def rotate(self):
         old_center = self.rect.center   
         rot = (self.get_mouse_angle()*180)/3.14
-        self.image = pygame.transform.rotate(self.image_orig , rot)  
+        self.image = pygame.transform.rotate(self.image_origin , rot)  
         self.rect = self.image.get_rect()  
         self.rect.center = old_center 
 
@@ -140,11 +130,11 @@ class Player(pygame.sprite.Sprite):
         if not action: return
         x_start = self.hitbox.centerx - self.spin.x * (self.gun.image_origin.get_width())
         y_start = self.hitbox.centery - self.spin.y * (self.gun.image_origin.get_width())
-        self.gun.fire([game.bullets], (x_start, y_start), self.get_mouse_angle())
+        self.gun.fire([game.visible_sprites, game.bullets], (x_start, y_start), self.get_mouse_angle())
         
     def set_alpha(self):
         alpha = 255 if self.is_not_dodging() else 0
-        self.image_orig.set_alpha(alpha)
+        self.image_origin.set_alpha(alpha)
         self.gun.image_origin.set_alpha(alpha)
     
     def set_speed(self):
@@ -153,7 +143,7 @@ class Player(pygame.sprite.Sprite):
     
     def set_color(self):
         color = colors.cyanic if self.can_get_hit() else colors.crimson
-        self.image_orig.fill(color)
+        self.image_origin.fill(color)
     
     def cooldowns(self):
         self.can_get_hit.timer()

@@ -7,13 +7,12 @@ from math import pi, sin, cos
 from explosion import Explosion
 from particles import StaticParticle
 from cooldown import Cooldown
+from support import get_surface
+from tile import Tile
 
-class Bullet(pygame.sprite.Sprite):
+class Bullet(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple, angle: float, status: Status, damage: int, rotate_angle=None) -> None:
-        super().__init__(groups)
-        self.object_type = ObjectType.bullet
-        self.can_move = True
-        self.place_in_net = []
+        super().__init__(groups, pos, get_surface(based_stats['size'], based_stats['color']), ObjectType.bullet, 2, (0, 0))
         self.based_stats = based_stats
 
         self.bullet_type = self.based_stats['type']
@@ -21,19 +20,13 @@ class Bullet(pygame.sprite.Sprite):
         self.damage = damage
         self.angle = angle
         self.rotate_angle = angle if rotate_angle is None else rotate_angle
+        self.image = pygame.transform.rotate(self.image_origin, self.rotate_angle/pi*180)
+        self.hitbox.center = pos
+        self.rect = self.image.get_rect(center = pos)
 
         self.life_time = Cooldown(4000)
         self.life_time.last_used_time = pygame.time.get_ticks()
         self.life_time.can_perform = False
-
-        self.color = self.based_stats['color']
-
-        self.image_origin = pygame.Surface(self.based_stats['size'])
-        self.image_origin.fill(self.color)
-        self.hitbox = self.image_origin.get_rect(center = pos)
-        self.image_origin.set_colorkey(colors.black)
-        self.image = pygame.transform.rotate(self.image_origin, self.rotate_angle/pi*180)
-        self.rect = self.image.get_rect(center = pos)
 
         self.direction = Vector2(cos(angle), -sin(angle)).normalize()
 

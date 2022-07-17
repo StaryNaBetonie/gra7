@@ -1,15 +1,10 @@
-import pygame
 from settings import ObjectType, Status
 from import_item import import_item
+from tile import Tile
 
-class RaiseableItem(pygame.sprite.Sprite):
+class RaiseableItem(Tile):
     def __init__(self, groups, pos, item_index=None) -> None:
-        super().__init__(groups)
-        self.object_type = ObjectType.raisable
-        self.can_move = False
-        self.place_in_net = []
         self.item = import_item(Status.player, item_index)
+        super().__init__(groups, pos, self.item.image_origin.copy(), ObjectType.raisable, 1, (0, 0))
+        self.hitbox.center = self.rect.center = pos
         self.item_type = self.item.item_type
-        self.image = self.item.image_origin.copy()
-        self.rect = self.image.get_rect(center = pos)
-        self.hitbox = self.rect.copy()
