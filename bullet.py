@@ -12,17 +12,15 @@ from tile import Tile
 
 class Bullet(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple, angle: float, status: Status, damage: int, rotate_angle=None) -> None:
-        super().__init__(groups, pos, get_surface(based_stats['size'], based_stats['color']), ObjectType.bullet, 2, (0, 0))
+        super().__init__(groups, get_surface(based_stats['size'], based_stats['color']), ObjectType.bullet, 2, (0, 0), center = pos)
         self.based_stats = based_stats
 
         self.bullet_type = self.based_stats['type']
         self.status = status
         self.damage = damage
         self.angle = angle
-        self.rotate_angle = angle if rotate_angle is None else rotate_angle
-        self.image = pygame.transform.rotate(self.image_origin, self.rotate_angle/pi*180)
-        self.hitbox.center = pos
-        self.rect = self.image.get_rect(center = pos)
+
+        self.rotate(angle, rotate_angle, pos)
 
         self.life_time = Cooldown(4000)
         self.life_time.last_used_time = pygame.time.get_ticks()
@@ -32,6 +30,11 @@ class Bullet(Tile):
 
         self.speed = self.based_stats['speed']
         self.acceleration = self.based_stats['acceleration']
+    
+    def rotate(self, angle, rotate_angle, pos):
+        self.rotate_angle = angle if rotate_angle is None else rotate_angle
+        self.image = pygame.transform.rotate(self.image_origin, self.rotate_angle/pi*180)
+        self.rect = self.image.get_rect(center = pos)
 
     def move(self, game):
         self.actions(game)

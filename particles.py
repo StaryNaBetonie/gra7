@@ -6,7 +6,7 @@ from tile import Tile
 
 class Particles(Tile):
     def __init__(self, groups, angle, speed, color, pos) -> None:
-        super().__init__(groups, pos, get_surface((5, 5), color), ObjectType.wall, 2)
+        super().__init__(groups, get_surface((5, 5), color), ObjectType.wall, 2, (0, 0), center = pos)
 
         self.life_time = 200
         self.time_of_born = pygame.time.get_ticks()
@@ -28,8 +28,7 @@ class Particles(Tile):
 class StaticParticle(Tile):
     def __init__(self, groups, path, pos, size) -> None:
         self.graphics = import_cut_graphicks(path, size)
-        super().__init__(groups, pos, self.graphics[0], ObjectType.wall, 2)
-        self.rect.center = pos
+        super().__init__(groups, self.graphics[0], ObjectType.wall, 2, (0, 0), center = pos)
         self.animation_speed = 0.2
         self.animation_index = 0
     

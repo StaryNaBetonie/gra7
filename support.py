@@ -2,8 +2,8 @@ from csv import reader
 import pygame
 from os import walk
 from random import randint
-
-from settings import TILE_SIZE
+from settings import TILE_SIZE, ObjectType
+from tile import Tile
 
 def import_csv_layout(path):
     terrain_map = []
@@ -49,3 +49,6 @@ def get_surface(size, color):
 def import_graphics(path):
     image = pygame.image.load(path).convert_alpha()
     return pygame.transform.scale2x(image)
+
+def add_tile(groups, pos, image):
+    Tile(groups, image, ObjectType.wall, 0, (0, -10), topleft = pos)

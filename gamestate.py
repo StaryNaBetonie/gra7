@@ -211,7 +211,7 @@ class Gamestate:
                         groups = [self.gameplay.visible_sprites]
                         place = col.set_player(self._exit['exit'])
                         image = import_graphics('graphics/stairs.png')
-                        self.exit = Tile(groups, place, image, ObjectType.stairs, 0)
+                        self.exit = Tile(groups, image, ObjectType.stairs, 0, (0, 0), topleft = place)
 
     
     def update(self, player):

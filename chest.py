@@ -8,8 +8,7 @@ from tile import Tile
 class Chest(Tile):
     def __init__(self, groups, pos, type) -> None:
         self.image_list = import_cut_graphicks(f'graphics/chests/{type}.png', (88, 62))
-        super().__init__(groups, pos, self.image_list[0], ObjectType.chest, 0)
-        self.rect.center = self.hitbox.center = pos
+        super().__init__(groups, self.image_list[0], ObjectType.chest, 0, (0, -10), center = pos)
         self.status = ChestStatus.closed
         self.gun_index = choice(item_range[type])
     

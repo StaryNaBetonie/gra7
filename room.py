@@ -3,6 +3,7 @@ from chest import Chest
 from settings import Border, ObjectType, RoomType, TILE_SIZE
 from tile import Tile
 from random import choice, randint
+from support import add_tile
 
 class Room:
     def __init__(self, level, index, room_type, walls, status=True, active=False) -> None:
@@ -26,7 +27,7 @@ class Room:
             new_floor.blit(floor, (0, 0))
             floor = new_floor
         floor_x, floor_y = self.place * 15 * TILE_SIZE
-        return Tile([gameplay.visible_sprites, gameplay.floor], (floor_x, floor_y + 20), floor, ObjectType.wall, -2)
+        return Tile([gameplay.visible_sprites, gameplay.floor], floor, ObjectType.wall, -2, (0, 0), topleft = (floor_x, floor_y + 20))
     
     def random_chest_type(self):
         random_number = randint(1, 100)
@@ -49,7 +50,7 @@ class Room:
                             if int(col) in [1, 2, 9, 10]:
                                 self.add_top_tile([gameplay.visible_sprites, gameplay.walls], (x, y), self.walls[int(col)])
                             else:
-                                Tile([gameplay.visible_sprites, gameplay.walls], (x, y), self.walls[int(col)], ObjectType.wall, 0)
+                                Tile([gameplay.visible_sprites, gameplay.walls], self.walls[int(col)], ObjectType.wall, 0, (0, -10), topleft = (x, y))
                         elif style == 'item':
                             groups = [gameplay.visible_sprites, gameplay.chests, gameplay.walls]
                             Chest(groups, (x+TILE_SIZE/2, y+TILE_SIZE/2), self.random_chest_type())
@@ -60,10 +61,10 @@ class Room:
             self.active = True
     
     def add_top_tile(self, groups, pos, image):
-        Tile(groups, pos, image, ObjectType.wall, 0)
+        add_tile(groups, pos, image)
         x_place, y_place = pos
-        Tile(groups, (x_place, y_place + TILE_SIZE), self.shadow, ObjectType.wall, -1, (-32, -20))
-    
+        Tile(groups, self.shadow, ObjectType.wall, -1, (-32, -20), topleft = (x_place, y_place + TILE_SIZE))
+        
     def add_border(self, groups):
         x = self.place.x * 15*TILE_SIZE
         y = self.place.y * 15*TILE_SIZE
@@ -77,36 +78,36 @@ class Room:
                 
             if border == Border.bottom:
                 index_list = [13, 14]
-                Tile(groups, (x+7*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                add_tile(groups, (x+7*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
-                    Tile(groups, (x +(7-i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
-                    Tile(groups, (x +(7+i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                    add_tile(groups, (x +(7-i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
+                    add_tile(groups, (x +(7+i)*TILE_SIZE, y+14*TILE_SIZE), self.walls[choice(index_list)])
 
             if border == Border.left:
                 index_list = [4, 8]
-                Tile(groups, (x, y+7*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                add_tile(groups, (x, y+7*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
-                    Tile(groups, (x, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
-                    Tile(groups, (x, y+(7+i)*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                    add_tile(groups, (x, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)])
+                    add_tile(groups, (x, y+(7+i)*TILE_SIZE), self.walls[choice(index_list)])
 
             if border == Border.right:
                 index_list = [7, 11]
-                Tile(groups, (x+14*TILE_SIZE, y+7*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                add_tile(groups, (x+14*TILE_SIZE, y+7*TILE_SIZE), self.walls[choice(index_list)])
                 for i in range(1, 5):
-                    Tile(groups, (x+14*TILE_SIZE, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
-                    Tile(groups, (x+14*TILE_SIZE, y+(7+i)*TILE_SIZE), self.walls[choice(index_list)], ObjectType.wall, 0)
+                    add_tile(groups, (x+14*TILE_SIZE, y+(7-i)*TILE_SIZE), self.walls[choice(index_list)])
+                    add_tile(groups, (x+14*TILE_SIZE, y+(7+i)*TILE_SIZE), self.walls[choice(index_list)])
 
         
-        if not self.room_type == RoomType.boss:
+        if self.room_type is not RoomType.boss:
             if not Border.bottom in self.border:
-                Tile(groups, (x+3*TILE_SIZE, y+14*TILE_SIZE), self.walls[6], ObjectType.wall, 0)
-                Tile(groups, (x+11*TILE_SIZE, y+14*TILE_SIZE), self.walls[5], ObjectType.wall, 0)
+                add_tile(groups, (x+3*TILE_SIZE, y+14*TILE_SIZE), self.walls[6])
+                add_tile(groups, (x+11*TILE_SIZE, y+14*TILE_SIZE), self.walls[5])
             if not Border.left in self.border:
                 self.add_top_tile(groups, (x, y+3*TILE_SIZE), self.walls[10])
-                Tile(groups, (x, y+11*TILE_SIZE), self.walls[6], ObjectType.wall, 0)
+                add_tile(groups, (x, y+11*TILE_SIZE), self.walls[6])
             if not Border.right in self.border:
                 self.add_top_tile(groups, (x+14*TILE_SIZE, y+3*TILE_SIZE), self.walls[9])
-                Tile(groups, (x+14*TILE_SIZE, y+11*TILE_SIZE), self.walls[5], ObjectType.wall, 0)
+                add_tile(groups, (x+14*TILE_SIZE, y+11*TILE_SIZE), self.walls[5])
             if not Border.top in self.border:
                 self.add_top_tile(groups, (x+3*TILE_SIZE, y), self.walls[10])
                 self.add_top_tile(groups, (x+11*TILE_SIZE, y), self.walls[9])

@@ -9,7 +9,7 @@ from tile import Tile
 
 class Enemy(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, gun: Gun, based_stats: dict) -> None:
-        super().__init__(groups, pos, get_surface(based_stats['size'], based_stats['color']), ObjectType.enemy, 0, (7, 7))
+        super().__init__(groups, get_surface(based_stats['size'], based_stats['color']), ObjectType.enemy, 0, (7, 7), topleft = pos)
         self.based_stats = based_stats
 
         self.gun = gun
@@ -138,7 +138,7 @@ class Boss(Enemy):
 
 class WormPart(Tile):
     def __init__(self, groups, pos: tuple, image: pygame.Surface, resistance: float) -> None:
-        super().__init__(groups, pos, image, ObjectType.enemy, 0, (7, 7))
+        super().__init__(groups, image, ObjectType.enemy, 0, (7, 7), center = pos)
         self.next_part = None
         self.resistance = resistance
         self.taken_damage = 0

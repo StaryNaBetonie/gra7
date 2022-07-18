@@ -10,7 +10,7 @@ from support import get_surface
 
 class Player(Tile):
     def __init__(self, groups, pos) -> None:
-        super().__init__(groups, pos, get_surface((40, 40), colors.cyanic), ObjectType.player, 0)
+        super().__init__(groups, get_surface((40, 40), colors.cyanic), ObjectType.player, 0, (0, -10), center = pos)
         self.on_screen = Vector2(0, 0)
 
         self.inventory = Inventory()
