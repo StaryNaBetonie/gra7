@@ -2,7 +2,7 @@ from random import randint
 import pygame
 from cooldown import Cooldown
 from settings import Status
-from bullet import Bullet, OrbitBullets, ExplosiveBullets
+from bullet import Bullet, FragmentationBullet, OrbitBullets, ExplosiveBullets
 from math import pi, sin, cos
 
 class Gun:
@@ -209,3 +209,11 @@ class ShotgunM3(Shotgun):
         for n in range(self.one_shot):
             _angle = 2*pi*n/self.one_shot
             OrbitBullets(groups, self.bullets_data, user_place, angle, self.owner, self.damage, _angle)
+
+class FragmentationGun(Gun):
+    def make_shots(self, groups, user_place, angle):
+        FragmentationBullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
+
+class FragmentationShotgun(Shotgun):
+    def add_bullet(self, groups, user_place, angle):
+        FragmentationBullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)

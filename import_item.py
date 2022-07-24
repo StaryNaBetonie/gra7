@@ -1,4 +1,4 @@
-from gun import Gun, Shotgun, ShotgunM3, WallGun, Railgun, GildedHydra, IceBraker, RocketLauncher, DoubleGun
+from gun import FragmentationGun, FragmentationShotgun, Gun, Shotgun, ShotgunM3, WallGun, Railgun, GildedHydra, IceBraker, RocketLauncher, DoubleGun
 from modifier import Modifier
 from settings import ItemType, weapon
 from enum import Enum
@@ -26,6 +26,10 @@ def import_item(owner:Enum, item_index:int=None) -> Gun:
             item = DoubleGun(owner, weapon_data, import_items(owner, weapon_data['parts']))
         elif weapon_data['item_type'] == ItemType.shotgun_m3:
             item = ShotgunM3(owner, weapon_data)
+        elif weapon_data['item_type'] == ItemType.fragment_gun:
+            item = FragmentationGun(owner, weapon_data)
+        elif weapon_data['item_type'] == ItemType.fragment_shotgun:
+            item = FragmentationShotgun(owner, weapon_data)
     return item
 
 def import_items(owner:Enum, item_index_list:list) -> list[Gun]:

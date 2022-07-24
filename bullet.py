@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from random import randint, choice
 from particles import Particles, StaticParticle
-from settings import ObjectType, Status, colors
+from settings import ObjectType, Status, colors, BulletType
 from math import pi, sin, cos
 from explosion import Explosion
 from particles import StaticParticle
@@ -123,3 +123,29 @@ class ExplosiveBullets(Bullet):
     def hit_obsticle(self, game):
         self.show_particles([game.visible_sprites, game.particles], game.enemies.sprites())
         self.kill()
+
+class FragmentationBullet(Bullet):
+    def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple, angle: float, status: Status, damage: int, rotate_angle=None) -> None:
+        super().__init__(groups, based_stats, pos, angle, status, damage, rotate_angle)
+        self.bullets_inside = self.based_stats['bullets_inside']
+        self.can_explode = Cooldown(500)
+        self.can_explode.can_perform = False
+        self.can_explode.last_used_time =  pygame.time.get_ticks()
+    
+    def new_bullets(self, game):
+        for n in range(self.bullets_inside):
+            groups = [game.visible_sprites, game.bullets]
+            based_stats = {'color': self.based_stats['color'], 'speed': self.speed, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)}
+            angle = self.angle + n * 2 * pi / self.bullets_inside
+            Bullet(groups, based_stats, self.hitbox.center, angle, self.status, self.damage//self.bullets_inside)
+
+    def explode(self, game):
+        if self.can_explode():
+            self.new_bullets(game)
+            self.kill()
+
+    def update(self, game):
+        super().update(game)
+        self.can_explode.timer()
+        self.explode(game)
+

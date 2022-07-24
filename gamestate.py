@@ -1,6 +1,6 @@
 import pygame
 from random import randint, choice
-from room import Room, MainRooms, BossRoom
+from room import Room, BossRoom
 from settings import ObjectType, RoomType, Border, TILE_SIZE, stage_data
 from mob_spawner import MobSpawner
 from tile import Tile
@@ -21,7 +21,7 @@ class Gamestate:
         self._import_levels(self.name)
         
         self.gamestate = [[None]*15 for i in range(15)]
-        self.gamestate[7][7] = MainRooms(self._enter, (7, 7), RoomType._enter, self.walls_graphics)
+        self.gamestate[7][7] = Room(self._enter, (7, 7), RoomType._enter, self.walls_graphics)
 
         self.add_map()
         self.add_border()
@@ -43,43 +43,61 @@ class Gamestate:
     
     def import_floor_graphic(self):
         path = f'graphics/levels/{self.name}/floor.png'
-        floor_image = import_cut_graphicks(path, (TILE_SIZE, TILE_SIZE))
-        floor = pygame.Surface((15*TILE_SIZE, 15*TILE_SIZE))
-        for col in range(15):
-            for row in range(15):
-                floor.blit(choice(floor_image), (row*TILE_SIZE, col*TILE_SIZE))
-        return floor
+        return import_cut_graphicks(path, (TILE_SIZE, TILE_SIZE))
+
     
     def _import_levels(self, state_type: str) -> None:
         path = f'levels/{state_type}/'
-        self._exit = {'walls': import_csv_layout(path+'exit_walls.csv'),
-                'exit': import_csv_layout(path+'exit_exit.csv')}
+        self._exit = {
+            'walls': import_csv_layout(path+'exit/_walls.csv'),
+            'floor': import_csv_layout(path+'exit/_floor.csv')
+        }
 
         self._enter = {
-            'walls': import_csv_layout(path+'enter_walls.csv'),
-            'player': import_csv_layout(path+'enter_player.csv')
+            'walls': import_csv_layout(path+'enter/_walls.csv'),
+            'floor': import_csv_layout(path+'enter/_floor.csv')
         }
 
         self._chest = {
-            'walls': import_csv_layout(path+'chest_room.csv'),
-            'item': import_csv_layout(path+'chest_item.csv')
+            'walls': import_csv_layout(path+'chest/_walls.csv'),
+            'floor': import_csv_layout(path+'chest/_floor.csv')
             }
 
         self.boss_room = [
-            {'walls': import_csv_layout(path+'corridor.csv')},
-            {'walls': import_csv_layout(path+'boss_room_botleft.csv')},
-            {'walls': import_csv_layout(path+'boss_room_botright.csv')},
-            {'walls': import_csv_layout(path+'boss_room_topleft.csv')},
-            {'walls': import_csv_layout(path+'boss_room_topright.csv')}
+            {'walls': import_csv_layout(path+'corridor/_walls.csv'),
+            'floor': import_csv_layout(path+'corridor/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'boss_bot_left/_walls.csv'),
+            'floor': import_csv_layout(path+'boss_bot_left/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'boss_bot_right/_walls.csv'),
+            'floor': import_csv_layout(path+'boss_bot_right/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'boss_top_left/_walls.csv'),
+            'floor': import_csv_layout(path+'boss_top_left/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'boss_top_right/_walls.csv'),
+            'floor': import_csv_layout(path+'boss_top_right/_floor.csv')},
         ]
 
         self.levels = [
-            {'walls': import_csv_layout(path+'map1.csv')},
-            {'walls': import_csv_layout(path+'map2.csv')},
-            {'walls': import_csv_layout(path+'map3.csv')},
-            {'walls': import_csv_layout(path+'map4.csv')},
-            {'walls': import_csv_layout(path+'map5.csv')},
-            {'walls': import_csv_layout(path+'map6.csv')}
+            {'walls': import_csv_layout(path+'room1/_walls.csv'),
+            'floor': import_csv_layout(path+'room1/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'room2/_walls.csv'),
+            'floor': import_csv_layout(path+'room2/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'room3/_walls.csv'),
+            'floor': import_csv_layout(path+'room3/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'room4/_walls.csv'),
+            'floor': import_csv_layout(path+'room4/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'room5/_walls.csv'),
+            'floor': import_csv_layout(path+'room5/_floor.csv')},
+
+            {'walls': import_csv_layout(path+'room6/_walls.csv'),
+            'floor': import_csv_layout(path+'room6/_floor.csv')},
         ]
     
     def kill_boss(self, groups):
@@ -120,7 +138,7 @@ class Gamestate:
                 _sum += self.add_points()
 
     def set_player(self):
-        return self.gamestate[7][7].set_player(self._enter['player'])
+        return self.gamestate[7][7].center
     
     def add_point(self, x, y, gamestate):
         points_number = 0
@@ -162,11 +180,7 @@ class Gamestate:
             self.add_special_room(number-1, level, type)
         else:
             room = rooms[randint(0, len(rooms)-1)]
-            if type == RoomType._exit:
-                self.gamestate[int(room.place.x)][int(room.place.y)] = MainRooms(level, room.place, type, self.walls_graphics, False)
-            else:
-                self.gamestate[int(room.place.x)][int(room.place.y)] = Room(level, room.place, type, self.walls_graphics, False)
-
+            self.gamestate[int(room.place.x)][int(room.place.y)] = Room(level, room.place, type, self.walls_graphics, False)
 
     def add_border(self):
         for row_index, row in enumerate(self.gamestate):
@@ -204,14 +218,15 @@ class Gamestate:
         for row in self.gamestate:
             for col in row:
                 if col is not None:
-                    if not col.room_type == RoomType.boss:
-                        col.add_border([self.gameplay.visible_sprites, self.gameplay.walls])
                     col.room = col.import_room(self.gameplay, self.floor_graphics)
+                    if not col.room_type == RoomType.boss:
+                        col.add_border([self.gameplay.visible_sprites, self.gameplay.walls], self.floor_graphics)
+                    col.import_floor(self.gameplay)
                     if col.room_type == RoomType._exit:
                         groups = [self.gameplay.visible_sprites]
-                        place = col.set_player(self._exit['exit'])
+                        place = col.center
                         image = import_graphics('graphics/stairs.png')
-                        self.exit = Tile(groups, image, ObjectType.stairs, 0, (0, 0), topleft = place)
+                        self.exit = Tile(groups, image, ObjectType.stairs, -1, (0, 0), center = place)
 
     
     def update(self, player):

@@ -44,12 +44,15 @@ class ItemType(Enum):
     double_gun = 8
     shotgun_m3 = 9
     modifier = 10
+    fragment_gun = 11
+    fragment_shotgun = 12
 
 class BulletType(Enum):
     normal = 1
     orbit = 2
     explosive = 3
     circle = 4
+    fragment = 5
 
 class LocationType(Enum):
     gameplay = 1
@@ -105,7 +108,6 @@ bullets = [
     {'id': 5, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/18, 'bullet_radius': 30},
     {'id': 6, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 50},
     {'id': 7, 'color': colors.orange, 'speed': 10, 'acceleration': 0.2, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/12, 'bullet_radius': 30},
-    # enemy
     {'id': 8, 'color': colors.lime_green, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
     {'id': 9, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0.1, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/18, 'bullet_radius': 30},
     {'id': 10, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 30},
@@ -116,6 +118,8 @@ bullets = [
     {'id': 15, 'color': colors.marble_gray, 'speed': 3, 'acceleration': 0.25, 'type': BulletType.normal, 'size': (11, 11)},
     {'id': 16, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.circle, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 200},
     {'id': 17, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 1, 'type': BulletType.normal, 'size': (15, 15)},
+    {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 4},
+    {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8},
 ]
 
 weapon = [
@@ -138,6 +142,8 @@ weapon = [
     {'name': 'Combined_Rifle_1', 'dmg': 15, 'ammo': 20, 'fire_rate': 90, 'reload_time': 1500, 'offset': pi/24, 'path': 'graphics/guns/Combined_Rifle_1.png', 'item_type': ItemType.gun, 'bullets': bullets[0]},
     {'name': 'Combined_Rifle_2', 'dmg': 50, 'ammo': 3, 'fire_rate': 600, 'reload_time': 1700, 'offset': pi/24, 'path': 'graphics/guns/Combined_Rifle_2.png', 'item_type': ItemType.rocket_launcher, 'bullets': bullets[4]},
     {'name': 'PulseCannon', 'dmg': 5, 'ammo': 4, 'fire_rate': 1200, 'reload_time': 1500, 'offset': 0, 'number_of_bullets_in_one_shot': 16, 'path': 'graphics/guns/PulseCannon.png', 'item_type': ItemType.shotgun_m3, 'bullets': bullets[6]},
+    {'name': 'Hegemony_Carbine', 'dmg': 40, 'ammo': 5, 'fire_rate': 1000, 'reload_time': 1500, 'offset': pi/24, 'path': 'graphics/guns/Hegemony_Carbine.png', 'item_type': ItemType.fragment_gun, 'bullets': bullets[18]},
+    {'name': 'Thr_Emperor', 'dmg': 20, 'ammo': 10, 'fire_rate': 350, 'reload_time': 2000, 'offset': pi/12, 'number_of_bullets_in_one_shot': 3, 'path': 'graphics/guns/The_Emperor.png', 'item_type': ItemType.fragment_shotgun, 'bullets': bullets[19]},
     # enemy guns
     # dungeon
     #19
@@ -162,27 +168,27 @@ weapon = [
 
 opponents = [
     # dungeon
-    {'hp': 50, 'color': colors.white, 'weapon': 19, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 100, 'color': colors.crimson, 'weapon': 20, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 100, 'color': colors.navy_blue, 'weapon': 21, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 50, 'color': colors.white, 'weapon': 21, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.crimson, 'weapon': 22, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.navy_blue, 'weapon': 23, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     # abyss
-    {'hp': 100, 'color': colors.dirty_green, 'weapon': 24, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 150, 'color': colors.dirty_blue, 'weapon': 25, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 150, 'color': colors.sea_green, 'weapon': 26, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.dirty_green, 'weapon': 26, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.dirty_blue, 'weapon': 27, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.sea_green, 'weapon': 28, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     # cave
-    {'hp': 150, 'color': colors.white, 'weapon': 29, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 200, 'color': colors.golden, 'weapon': 30, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 200, 'color': colors.dark_gray, 'weapon': 31, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.white, 'weapon': 31, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 200, 'color': colors.golden, 'weapon': 32, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 200, 'color': colors.dark_gray, 'weapon': 33, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 
 ]
 
 bosses = [
     # dungeon
-    {'hp': 2500, 'color': colors.white, 'weapons': [22, 23], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 2500, 'color': colors.white, 'weapons': [24, 25], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
     # abyss
-    {'hp': 3000, 'color': colors.white, 'weapons': [27, 28], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 3000, 'color': colors.white, 'weapons': [29, 30], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
     # cave
-    {'hp': 4000, 'color': colors.white, 'weapons': [32, 33], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 4000, 'color': colors.white, 'weapons': [34, 35], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'size': (200, 200)},
 ]
 
 stage_data = [
@@ -193,8 +199,8 @@ stage_data = [
 
 item_range = {
     'wooden': [4, 5, 10],
-    'sea_prism': [2, 3, 6, 7],
-    'golden': [0, 1, 11, 14, 18],
-    'nigger': [9, 12, 13, 15]
+    'sea_prism': [2, 3, 6, 7, 19],
+    'golden': [0, 1, 11, 14, 20],
+    'nigger': [9, 12, 13, 15, 18]
 }
 
