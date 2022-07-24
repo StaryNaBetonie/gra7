@@ -39,9 +39,11 @@ class NetGroup:
     
     def debug(self, object, x_index, y_index) -> bool:
         net_size = len(self.net) - 1
-        if x_index > net_size or y_index > net_size:
+        if not x_index in range(net_size): 
             object.kill()
-            print('obiekt został zdezintegrowany')
+            return False
+        if not y_index in range(net_size):
+            object.kill()
             return False
         return True
     
