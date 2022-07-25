@@ -11,7 +11,7 @@ class Gamestate:
     def __init__(self, gameplay) -> None:
 
         self.gameplay = gameplay
-        self.stage_number = self.gameplay.stage_number%3
+        self.stage_number = self.gameplay.stage_number%4
         self.state_data = stage_data[self.stage_number]
         self.name = self.state_data['name']
         self.key_color = self.state_data['key_color']

@@ -97,6 +97,7 @@ class colors:
     dark_brown = '#25131a'
     seaweed_green = '#090716'
     blue_gray = '#1d1d21'
+    crimson_background = '#320202'
 
 bullets = [
     # player
@@ -119,7 +120,10 @@ bullets = [
     {'id': 16, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.circle, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 200},
     {'id': 17, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 1, 'type': BulletType.normal, 'size': (15, 15)},
     {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 4},
-    {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8},
+    {'id': 19, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8},
+    {'id': 20, 'color': colors.white, 'speed': 12, 'acceleration': 0, 'type': BulletType.circle, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 30},
+    {'id': 21, 'color': colors.white, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (20, 20), 'bullets_inside': 4},
+    {'id': 22, 'color': colors.white, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
 ]
 
 weapon = [
@@ -164,6 +168,10 @@ weapon = [
     {'name': 'Enemy_Gun9', 'dmg': 1, 'ammo': 15, 'fire_rate': 600, 'reload_time': 5000, 'offset': pi/12, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun, 'bullets': bullets[15]},
     {'name': 'Boss_gun5', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 32, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[16]},
     {'name': 'Boss_gun6', 'dmg': 1, 'ammo': 8, 'fire_rate': 450, 'reload_time': 2000, 'offset': 0, 'number_of_bullets_in_one_shot': 11, 'path': None, 'item_type': ItemType.wallgun, 'bullets': bullets[17]},
+    #crimson
+    {'name': 'Enemy_Gun10', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[20]},
+    {'name': 'Enemy_Gun11', 'dmg': 1, 'ammo': 3, 'fire_rate': 1500, 'reload_time': 2000, 'offset': pi/8, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.fragment_shotgun, 'bullets': bullets[21]},
+    {'name': 'Enemy_Gun12', 'dmg': 1, 'ammo': 8, 'fire_rate': 600, 'reload_time': 1500, 'offset': -3, 'number_of_bullets_in_one_shot': 5, 'path': None, 'item_type': ItemType.wallgun, 'bullets': bullets[22]},
 ]
 
 opponents = [
@@ -180,6 +188,9 @@ opponents = [
     {'hp': 200, 'color': colors.golden, 'weapon': 32, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     {'hp': 200, 'color': colors.dark_gray, 'weapon': 33, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 
+    {'hp': 150, 'color': '#6f6f6f', 'weapon': 36, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 300, 'color': colors.golden, 'weapon': 37, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 350, 'color': '#6f0000', 'weapon': 38, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 ]
 
 bosses = [
@@ -195,6 +206,7 @@ stage_data = [
     {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': [0]},
     {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': [1]},
     {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': [2]},
+    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': [2]},
 ]
 
 item_range = {

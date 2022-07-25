@@ -34,7 +34,7 @@ class GamePlay:
         self.player = Player([self.visible_sprites], self.gamestate.set_player())
     
     def new_gamestate(self):
-        _stage_data = stage_data[self.stage_number%3]
+        _stage_data = stage_data[self.stage_number%4]
         self.static_objects.clear()
         self.gamestate = Gamestate(self)
         self.static_objects.add_list(self.walls.sprites())
