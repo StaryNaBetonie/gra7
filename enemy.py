@@ -4,12 +4,11 @@ from gun import Gun
 from settings import Direction, ObjectType, colors
 from math import atan, pi, sin, cos
 from random import choice
-from support import get_surface
 from tile import Tile
 
 class Enemy(Tile):
-    def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, gun: Gun, based_stats: dict) -> None:
-        super().__init__(groups, get_surface(based_stats['size'], based_stats['color']), ObjectType.enemy, 0, (7, 7), topleft = pos)
+    def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, gun: Gun, based_stats: dict, image: pygame.Surface) -> None:
+        super().__init__(groups, image, ObjectType.enemy, 0, (7, 7), topleft = pos)
         self.based_stats = based_stats
 
         self.gun = gun
@@ -117,19 +116,17 @@ class Enemy(Tile):
         self.reload()
 
 class Boss(Enemy):
-    def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, guns: list[Gun], based_stats: dict) -> None:
-        super().__init__(groups, pos, choice(guns), based_stats)
-        self.import_graphics()
+    def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, guns: list[Gun], based_stats: dict, image: pygame.Surface) -> None:
+        super().__init__(groups, pos, choice(guns), based_stats, image)
         self.inventory = guns
+        self.left = self.image
+        self.right = pygame.transform.flip(self.image, True, False)
     
-    def import_graphics(self):
-        offset = 10
-        size = self.image_orig.get_size()
-        rect = pygame.Rect(offset, offset, size[0]//2-2*offset, size[1]//2-2*offset)
-        pygame.draw.rect(self.image_orig, colors.boss_gray, rect)
-        rect.left += size[0]//2
-        rect.top += size[1]//2
-        pygame.draw.rect(self.image_orig, colors.boss_gray, rect)
+    def rotate(self):
+        self.image = self.left if self.direction.x < 0 else self.right
+    
+    def get_pos(self):
+        return self.hitbox.center
     
     def reload(self):
         if self.gun.current_ammo <= 0:

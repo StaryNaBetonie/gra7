@@ -195,18 +195,20 @@ opponents = [
 
 bosses = [
     # dungeon
-    {'hp': 2500, 'color': colors.white, 'weapons': [24, 25], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 2500, 'weapons': [24, 25], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'brimstone_elemental'},
     # abyss
-    {'hp': 3000, 'color': colors.white, 'weapons': [29, 30], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 3000, 'weapons': [29, 30], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'name': 'paguebringer'},
     # cave
-    {'hp': 4000, 'color': colors.white, 'weapons': [34, 35], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'size': (200, 200)},
+    {'hp': 4000, 'weapons': [34, 35], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'crabulon'},
+
+    {'hp': 6000, 'weapons': [34, 35], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'providence'},
 ]
 
 stage_data = [
-    {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': [0]},
-    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': [1]},
-    {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': [2]},
-    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': [2]},
+    {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': 0},
+    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': 1},
+    {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': 2},
+    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3},
 ]
 
 item_range = {

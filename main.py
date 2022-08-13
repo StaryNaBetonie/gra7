@@ -1,4 +1,5 @@
 import pygame
+from controls_loop import ControlsLoop
 from gameplay_loop import GameplyLoop
 from menu_loop import MenuLoop
 
@@ -11,6 +12,7 @@ class Game:
 
         self.menu_loop = MenuLoop(self)
         self.gameplay_loop = GameplyLoop(self)
+        self.controls_loop = ControlsLoop(self)
         self.current_loop = self.menu_loop
     
     def current_loop_is_gameplay(self):
@@ -18,6 +20,9 @@ class Game:
     
     def current_loop_is_menu(self):
         self.current_loop = self.menu_loop
+    
+    def current_loop_is_controls(self):
+        self.current_loop = self.controls_loop
     
     def main_loop(self):
         while self.running:

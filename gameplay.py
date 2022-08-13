@@ -1,5 +1,4 @@
 import pygame
-from enemy import Enemy
 from player import Player
 from random import randint
 from gamestate import Gamestate

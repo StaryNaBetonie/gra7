@@ -55,7 +55,7 @@ class UI:
         window.blit(ammo_img, (15, 840))
     
     def show_boss_hp(self, window, boss, player_pos):
-        if boss != None:
+        if boss is not None:
             if pygame.Vector2(boss.get_pos()[0] - player_pos[0], boss.get_pos()[1] - player_pos[1]).magnitude() <= 1000:
                 place_rec = pygame.Rect(710, 950, 500, 25)
                 pygame.draw.rect(window, '#404040', place_rec)

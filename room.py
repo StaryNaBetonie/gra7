@@ -149,6 +149,7 @@ class BossRoom:
         self.botright = Room(level[2], (index[0]+1, index[1]-1), self.room_type, walls, False)
         self.topleft = Room(level[3], (index[0], index[1]-2), self.room_type, walls, False)
         self.topright = Room(level[4], (index[0]+1, index[1]-2), self.room_type, walls, False)
+        self.center = self.botright.place * 15
     
     def set_active(self, player):
         player_place = (int(player.x/15/TILE_SIZE), int(player.y/15/TILE_SIZE))
