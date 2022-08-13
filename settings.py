@@ -97,7 +97,7 @@ class colors:
     dark_brown = '#25131a'
     seaweed_green = '#090716'
     blue_gray = '#1d1d21'
-    crimson_background = '#320202'
+    crimson_background = '#2f0b00'
 
 bullets = [
     # player
@@ -123,7 +123,7 @@ bullets = [
     {'id': 19, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8},
     {'id': 20, 'color': colors.white, 'speed': 12, 'acceleration': 0, 'type': BulletType.circle, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 30},
     {'id': 21, 'color': colors.white, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (20, 20), 'bullets_inside': 4},
-    {'id': 22, 'color': colors.white, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
+    {'id': 22, 'color': colors.white, 'speed': 0, 'acceleration': 0, 'type': BulletType.normal, 'size': (32, 32)},
 ]
 
 weapon = [
@@ -171,7 +171,7 @@ weapon = [
     #crimson
     {'name': 'Enemy_Gun10', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[20]},
     {'name': 'Enemy_Gun11', 'dmg': 1, 'ammo': 3, 'fire_rate': 1500, 'reload_time': 2000, 'offset': pi/8, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.fragment_shotgun, 'bullets': bullets[21]},
-    {'name': 'Enemy_Gun12', 'dmg': 1, 'ammo': 8, 'fire_rate': 600, 'reload_time': 1500, 'offset': -3, 'number_of_bullets_in_one_shot': 5, 'path': None, 'item_type': ItemType.wallgun, 'bullets': bullets[22]},
+    {'name': 'Enemy_Gun12', 'dmg': 1, 'ammo': 15, 'fire_rate': 250, 'reload_time': 4500, 'offset': 0, 'path': None, 'item_type': ItemType.gun, 'bullets': bullets[22]},
 ]
 
 opponents = [
@@ -205,10 +205,10 @@ bosses = [
 ]
 
 stage_data = [
+    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3},
     {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': 0},
     {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': 1},
     {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': 2},
-    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3},
 ]
 
 item_range = {

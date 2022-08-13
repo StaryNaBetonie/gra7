@@ -22,10 +22,6 @@ class Bullet(Tile):
 
         self.rotate(angle, rotate_angle, pos)
 
-        self.life_time = Cooldown(4000)
-        self.life_time.last_used_time = pygame.time.get_ticks()
-        self.life_time.can_perform = False
-
         self.direction = Vector2(cos(angle), -sin(angle)).normalize()
 
         self.speed = self.based_stats['speed']
@@ -70,12 +66,8 @@ class Bullet(Tile):
         self.show_particles([game.visible_sprites, game.particles])
         self.kill()
 
-    def life_cooldown(self):
-        if self.life_time(): self.kill()
-            
     def update(self, game):
         self.move(game)
-        self.life_cooldown()
 
 class OrbitBullets(Bullet):
     def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple, angle: float, status: Status, damage: int, rotate_angle=None) -> None:
