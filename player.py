@@ -14,8 +14,7 @@ class Player(Tile):
         self.on_screen = Vector2(0, 0)
 
         self.inventory = Inventory()
-        self.weapon_number = 0
-        self.gun = self.inventory.space[self.weapon_number]
+        self.gun = self.gun = self.inventory.selected_gun
 
         self.max_hp = 30
         self.hp = self.max_hp
@@ -49,7 +48,7 @@ class Player(Tile):
         if item.item_type == ItemType.modifier:
             self.gun.add_modifier(item)
         else:
-            self.inventory.space.append(item)
+            self.inventory.add_item(item)
     
     def make_dodge(self):
         if not self.can_make_dodge(): return
@@ -91,11 +90,9 @@ class Player(Tile):
         else: self.direction.x = 0
 
     def change_item_slot(self, direction):
-        if direction and self.weapon_number != len(self.inventory.space)-1:
-            self.weapon_number += 1
-        if not direction and self.weapon_number != 0:
-            self.weapon_number -= 1
-        self.gun = self.inventory.space[self.weapon_number]
+        if direction: self.inventory.go_right()
+        if not direction: self.inventory.go_left()
+        self.gun = self.inventory.selected_gun
     
     def move(self, game):
         if self.direction.magnitude() != 0: self.direction.normalize()

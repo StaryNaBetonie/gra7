@@ -24,28 +24,19 @@ class NetGroup:
         top_index = object.hitbox.top//self.cell_size
         bot_index = object.hitbox.bottom//self.cell_size
 
-        x_idexes_number = 1 + (right_index - left_index)
-        y_idexes_number = 1 + (bot_index - top_index)
+        x_idexes_number = 1 + right_index - left_index
+        y_idexes_number = 1 + bot_index - top_index
 
         object.place_in_net = []
+        net_size = len(self.net) - 1
 
         for x in range(x_idexes_number):
             for y in range(y_idexes_number):
-                x_index = left_index + x
-                y_index = top_index + y
-                if self.debug(object, x_index, y_index):
+                x_index = max(0, min(left_index + x, net_size))
+                y_index = max(0, min(top_index + y, net_size))
+                if not (x_index, y_index) in object.place_in_net:
                     object.place_in_net.append((x_index, y_index))
                     self.net[y_index][x_index].append(object)
-    
-    def debug(self, object, x_index, y_index) -> bool:
-        net_size = len(self.net) - 1
-        if not x_index in range(net_size): 
-            object.kill()
-            return False
-        if not y_index in range(net_size):
-            object.kill()
-            return False
-        return True
     
     def add_list(self, list):
         for obj in list:

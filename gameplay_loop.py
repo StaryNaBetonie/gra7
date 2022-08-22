@@ -46,6 +46,7 @@ class GameplyLoop:
                     self.gameplay.player.interact_with_objects(self.gameplay)
                 elif event.key == pygame.K_F9:
                     self.gameplay.player.inventory.all_weapons()
+                    self.gameplay.player.gun = self.gameplay.player.inventory.selected_gun
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     self.gameplay.actions['up'] = False
