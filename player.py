@@ -27,6 +27,8 @@ class Player(Tile):
         self.direction = Vector2()
         self.speed = 6
 
+        self.moving_down = False
+
         self.interaction_hitbox = self.rect.copy().inflate(10, 10)
     
     def interact_with_objects(self, game):
@@ -80,6 +82,7 @@ class Player(Tile):
 
     def set_directions(self, actions):
         if not self.is_not_dodging(): return
+        if self.moving_down: return
 
         if actions['up']: self.direction.y = -1
         elif actions['down']: self.direction.y = 1
@@ -104,7 +107,8 @@ class Player(Tile):
         
         if self.hitbox.colliderect(game.gamestate.exit.rect):
             if game.gamestate.mob_spawner.boss is None:
-                game.new_level()
+                self.moving_down = True
+                self.direction = pygame.Vector2(0, 0.5)
     
     def wall_collision(self, direction, game):
         collision_objects = game.static_objects.query(self, self.hitbox)

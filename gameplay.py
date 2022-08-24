@@ -1,4 +1,5 @@
 import pygame
+from black_screen import BlackScreen
 from player import Player
 from random import randint
 from gamestate import Gamestate
@@ -23,6 +24,7 @@ class GamePlay:
         self.actions = {'up':False, 'left':False, 'down':False, 'right':False, 'fire':False}
 
         self.ui = UI()
+        self.black_screen = BlackScreen()
 
         self.enemy_cooldow = 2500
         self.enemy_time = 0
@@ -42,6 +44,8 @@ class GamePlay:
     def render(self, screen):
         self.visible_sprites.custom_draw(self.player)
         self.player.gun.render(screen, self.player)
+        if self.player.moving_down:
+            self.black_screen.play(screen, self.new_level, self.player)
         self.ui.show_gun(self.player.gun.image_origin.copy(), screen)
         self.ui.show_gun_stats(screen, self.player.gun.damage, self.player.gun.based_stats['ammo'])
         self.ui.show_player_hp(self.player.hp, screen)
@@ -62,7 +66,7 @@ class GamePlay:
         self.kill_entity()
         self.gamestate.delete_gamestate()
         self.new_gamestate()
-        self.player.hitbox.topleft = self.gamestate.set_player()
+        self.player.hitbox.center = self.gamestate.set_player()
     
     def key_color(self):
         return self.gamestate.key_color
@@ -93,7 +97,4 @@ class CustomCamera(pygame.sprite.Group):
 
         for sprite in sorted(self.sprites(), key = lambda sprite: (sprite._layer, sprite.rect.centery)):
             offset_pos = sprite.rect.topleft - self.offset
-            x = sprite.rect.centerx-player.hitbox.centerx
-            y = sprite.rect.centery-player.hitbox.centery
-            if pygame.math.Vector2(x, y).magnitude() < 1700:
-                self.display_surface.blit(sprite.image, offset_pos, special_flags = sprite.get_special_flag())
+            self.display_surface.blit(sprite.image, offset_pos, special_flags = sprite.special_flag)

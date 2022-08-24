@@ -7,12 +7,7 @@ class NetGroup:
         self.cell_size = (TILE_SIZE*5)
 
     def new_net(self):
-        net = []
-        for i in range(45):
-            net.append([])
-            for j in range(45):
-                net[i].append([])
-        
+        net = [[[] for col in range(45)] for row in range(45)]
         return net
     
     def clear(self):

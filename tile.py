@@ -13,6 +13,8 @@ class Tile(pygame.sprite.Sprite):
         self.image = surface
         self.rect = get_rect(self.image, pos)
         self.hitbox = self.rect.copy().inflate(hitbox_offset)
+
+        self.special_flag = self.get_special_flag()
     
     def get_special_flag(self):
         return pygame.BLEND_RGBA_MULT if self.object_type is ObjectType.shadow else 0

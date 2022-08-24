@@ -10,8 +10,6 @@ class Room:
     def __init__(self, level, index, room_type, walls, status=True, active=False) -> None:
         self.room_type = room_type
         self.walls = walls
-        self.shadow = pygame.image.load('graphics/levels/dungeon/shadow.png')
-        self.shadow.set_alpha(100)
         self.floor_surface = pygame.Surface((15 * TILE_SIZE, 15 * TILE_SIZE))
 
         self.active = active
