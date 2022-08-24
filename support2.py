@@ -1,3 +1,6 @@
+from lib2to3 import pygram
+
+
 def get_rect(image, kwargs):
     rect = image.get_rect()
     for key, value in kwargs.items():

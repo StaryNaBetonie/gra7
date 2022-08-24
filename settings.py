@@ -66,6 +66,7 @@ class ObjectType(Enum):
     raisable = 5
     chest = 6
     stairs = 7
+    shadow = 8
 
 class ChestStatus(Enum):
     closed = 1

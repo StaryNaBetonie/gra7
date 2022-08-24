@@ -4,7 +4,7 @@ from chest import Chest
 from settings import Border, ObjectType, RoomType, TILE_SIZE
 from tile import Tile
 from random import choice, randint
-from support import add_tile
+from support import add_tile, generage_shadow
 
 class Room:
     def __init__(self, level, index, room_type, walls, status=True, active=False) -> None:
@@ -68,7 +68,7 @@ class Room:
     def add_top_tile(self, groups, pos, image):
         add_tile(groups, pos, image)
         x_place, y_place = pos
-        Tile(groups, self.shadow, ObjectType.wall, -1, (-32, -20), topleft = (x_place, y_place + TILE_SIZE))
+        Tile(groups, generage_shadow(2.5), ObjectType.shadow, -1, (-64, -41), topleft = (x_place, y_place + TILE_SIZE))
         
     def add_border(self, groups, floor_graphics):
         x = self.place.x * 15*TILE_SIZE

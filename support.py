@@ -52,3 +52,12 @@ def import_graphics(path):
 
 def add_tile(groups, pos, image):
     Tile(groups, image, ObjectType.wall, 0, (0, -10), topleft = pos)
+
+def generage_shadow(speed):
+    surface = pygame.Surface((TILE_SIZE, 42))
+    color = 255
+    for i in range(42):
+        rect = pygame.Rect((0, 0), (TILE_SIZE, 42 - i))
+        pygame.draw.rect(surface, (color, color, color), rect)
+        color -= speed
+    return surface

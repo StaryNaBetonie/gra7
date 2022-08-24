@@ -14,7 +14,7 @@ class Player(Tile):
         self.on_screen = Vector2(0, 0)
 
         self.inventory = Inventory()
-        self.gun = self.gun = self.inventory.selected_gun
+        self.gun = self.gun = self.inventory.select_gun()
 
         self.max_hp = 30
         self.hp = self.max_hp
@@ -89,10 +89,8 @@ class Player(Tile):
         elif actions['right']: self.direction.x = 1
         else: self.direction.x = 0
 
-    def change_item_slot(self, direction):
-        if direction: self.inventory.go_right()
-        if not direction: self.inventory.go_left()
-        self.gun = self.inventory.selected_gun
+    def select_gun(self):
+        self.gun = self.inventory.select_gun()
     
     def move(self, game):
         if self.direction.magnitude() != 0: self.direction.normalize()

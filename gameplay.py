@@ -96,4 +96,4 @@ class CustomCamera(pygame.sprite.Group):
             x = sprite.rect.centerx-player.hitbox.centerx
             y = sprite.rect.centery-player.hitbox.centery
             if pygame.math.Vector2(x, y).magnitude() < 1700:
-                self.display_surface.blit(sprite.image, offset_pos)
+                self.display_surface.blit(sprite.image, offset_pos, special_flags = sprite.get_special_flag())

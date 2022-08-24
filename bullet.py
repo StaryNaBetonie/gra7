@@ -26,6 +26,10 @@ class Bullet(Tile):
 
         self.speed = self.based_stats['speed']
         self.acceleration = self.based_stats['acceleration']
+
+        self.life_cooldown = Cooldown(15000)
+        self.life_cooldown.can_perform = False
+        self.life_cooldown.last_used_time = pygame.time.get_ticks()
     
     def rotate(self, angle, rotate_angle, pos):
         self.rotate_angle = angle if rotate_angle is None else rotate_angle
@@ -37,6 +41,7 @@ class Bullet(Tile):
         self.hitbox.center += self.direction * self.speed
         self.rect.center = self.hitbox.center
         self.speed += self.acceleration
+        self.speed = max(0, self.speed)
 
     def actions(self, game):
         if game.static_objects.query(self, self.hitbox):
@@ -65,8 +70,14 @@ class Bullet(Tile):
     def hit_obsticle(self, game):
         self.show_particles([game.visible_sprites, game.particles])
         self.kill()
+    
+    def life_time(self):
+        if self.life_cooldown():
+            self.kill()
 
     def update(self, game):
+        self.life_time()
+        self.life_cooldown.timer()
         self.move(game)
 
 class OrbitBullets(Bullet):
