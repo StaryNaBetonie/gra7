@@ -1,6 +1,7 @@
 import pygame
 from math import pi, sin, cos, atan
 from pygame.math import Vector2
+from particles import Ghost
 from settings import Direction, ItemType, ObjectType, colors
 from inventory import Inventory
 from random import randint
@@ -32,10 +33,16 @@ class Player(Tile):
         self.interaction_hitbox = self.rect.copy().inflate(10, 10)
     
     def interact_with_objects(self, game):
-        objects = game.net_group.query(self, self.interaction_hitbox)
+        objects = game.grid_group.query(self, self.interaction_hitbox)
         for _object in objects:
             if _object.object_type == ObjectType.raisable:
                 self.add_item(_object.item)
+                Ghost(
+                    groups = [game.visible_sprites, game.particles], 
+                    surface = _object.item.image_origin, 
+                    pos = _object.hitbox.center, 
+                    layer = _object._layer, 
+                    duraction = 200)
                 _object.kill()
             if _object.object_type == ObjectType.chest:
                 _object.open(game)

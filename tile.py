@@ -7,7 +7,7 @@ class Tile(pygame.sprite.Sprite):
         super().__init__(groups)
         self._layer = layer
         self.object_type = object_type
-        self.place_in_net = []
+        self.place_in_grid = []
     
         self.image_origin = surface
         self.image = surface

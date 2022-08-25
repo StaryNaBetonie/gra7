@@ -5,7 +5,7 @@ from random import randint
 from gamestate import Gamestate
 from ui import UI
 from settings import stage_data, LocationType
-from net import NetGroup
+from grid import GridGroup
 
 class GamePlay:
     def __init__(self) -> None:
@@ -18,8 +18,8 @@ class GamePlay:
         self.walls = pygame.sprite.Group()
         self.chests = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
-        self.net_group = NetGroup()
-        self.static_objects = NetGroup()
+        self.grid_group = GridGroup()
+        self.static_objects = GridGroup()
         
         self.actions = {'up':False, 'left':False, 'down':False, 'right':False, 'fire':False}
 
@@ -78,7 +78,7 @@ class GamePlay:
         self.enemies.update(self) 
         self.bullets.update(self)
         self.gamestate.update(self.player.rect)
-        self.net_group.update(self)
+        self.grid_group.update(self)
         if self.gamestate.mob_spawner.boss is  None: return
         self.gamestate.mob_spawner.boss.update(self)
 

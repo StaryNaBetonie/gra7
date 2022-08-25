@@ -46,7 +46,7 @@ class Bullet(Tile):
     def actions(self, game):
         if game.static_objects.query(self, self.hitbox):
             self.hit_obsticle(game)
-        obsticles = game.net_group.query(self, self.hitbox)
+        obsticles = game.grid_group.query(self, self.hitbox)
         if self.status == Status.player:
             for _object in obsticles:
                 if _object.object_type == ObjectType.enemy:

@@ -47,10 +47,10 @@ class Enemy(Tile):
     def move(self, game):
         self.hitbox.x += self.direction.x * self.speed
         self.collision(Direction.horizontal, game.static_objects)
-        if self.acceleration == 0: self.collision(Direction.horizontal, game.net_group)
+        if self.acceleration == 0: self.collision(Direction.horizontal, game.grid_group)
         self.hitbox.y += self.direction.y * self.speed
         self.collision(Direction.vertical, game.static_objects)
-        if self.acceleration == 0: self.collision(Direction.vertical, game.net_group)
+        if self.acceleration == 0: self.collision(Direction.vertical, game.grid_group)
         self.rect.center = self.hitbox.center
     
     def collision(self, direction, obsticles):

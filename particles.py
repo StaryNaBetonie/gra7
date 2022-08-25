@@ -39,3 +39,18 @@ class StaticParticle(Tile):
 
     def update(self) -> None:
         self.animate()
+    
+class Ghost(Tile):
+    def __init__(self, groups, surface, pos, layer, duraction) -> None:
+        mask_surface = pygame.mask.from_surface(surface)
+        new_surface = mask_surface.to_surface()
+        new_surface.set_colorkey((0, 0, 0))
+        
+        super().__init__(groups, new_surface, ObjectType.wall, layer, (0, 0), center = pos)
+        self.start_time = pygame.time.get_ticks()
+        self.duraction = duraction
+
+    def update(self):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.start_time >= self.duraction:
+            self.kill()
