@@ -49,8 +49,12 @@ class Ghost(Tile):
         super().__init__(groups, new_surface, ObjectType.wall, layer, (0, 0), center = pos)
         self.start_time = pygame.time.get_ticks()
         self.duraction = duraction
+        self.alpha = 255
 
     def update(self):
         current_time = pygame.time.get_ticks()
         if current_time - self.start_time >= self.duraction:
-            self.kill()
+            self.alpha -= 20
+            self.image.set_alpha(self.alpha)
+            if self.alpha <= 0:
+                self.kill()

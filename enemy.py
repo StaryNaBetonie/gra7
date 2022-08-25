@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from gun import Gun
+from particles import Ghost
 from settings import Direction, ObjectType, colors
 from math import atan, pi, sin, cos
 from random import choice
@@ -82,8 +83,14 @@ class Enemy(Tile):
     def get_hit(self, damage):
         self.hp -= damage
     
-    def death(self):
+    def death(self, game):
         if self.hp > 0: return
+        Ghost(
+            groups = [game.visible_sprites, game.particles],
+            surface = self.image,
+            pos = self.hitbox.center,
+            layer = self._layer,
+            duraction = 100)
         self.kill()
 
     def create_attack(self, game):
@@ -111,7 +118,7 @@ class Enemy(Tile):
         self.rotate()
         self.move_logic(game)
         self.gun.update()
-        self.death()
+        self.death(game)
         self.acceleration_logic()
         self.reload()
 
