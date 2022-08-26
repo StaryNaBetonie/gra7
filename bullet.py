@@ -2,13 +2,20 @@ import pygame
 from pygame.math import Vector2
 from random import randint, choice
 from particles import Particles, StaticParticle
-from settings import ObjectType, Status, colors, BulletType
+from settings import ObjectType, Status, colors, bullets, BulletType
 from math import pi, sin, cos
 from explosion import Explosion
 from particles import StaticParticle
 from cooldown import Cooldown
 from support import get_surface
 from tile import Tile
+
+def create_bullet(groups, based_stats, pos, angle, status, damage, rotate_angle=None):
+    bullet_type = based_stats['type']
+    if bullet_type is BulletType.normal: Bullet(groups, based_stats, pos, angle, status, damage, rotate_angle)
+    elif bullet_type is BulletType.orbit: OrbitBullets(groups, based_stats, pos, angle, status, damage, rotate_angle)
+    elif bullet_type is BulletType.explosive: ExplosiveBullets(groups, based_stats, pos, angle, status, damage, rotate_angle)
+    elif bullet_type is BulletType.fragment: FragmentationBullet(groups, based_stats, pos, angle, status, damage, rotate_angle)
 
 class Bullet(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], based_stats: dict, pos: tuple, angle: float, status: Status, damage: int, rotate_angle=None) -> None:
@@ -138,9 +145,9 @@ class FragmentationBullet(Bullet):
     def new_bullets(self, game):
         for n in range(self.bullets_inside):
             groups = [game.visible_sprites, game.bullets]
-            based_stats = {'color': self.based_stats['color'], 'speed': self.speed, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)}
+            based_stats = bullets[self.based_stats['bullets_inside_id']]
             angle = self.angle + n * 2 * pi / self.bullets_inside
-            Bullet(groups, based_stats, self.hitbox.center, angle, self.status, self.damage//self.bullets_inside)
+            create_bullet(groups, based_stats, self.hitbox.center, angle, self.status, self.damage//self.bullets_inside*2)
 
     def explode(self, game):
         if self.can_explode():

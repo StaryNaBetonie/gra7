@@ -2,7 +2,7 @@ from random import randint
 import pygame
 from cooldown import Cooldown
 from settings import Status
-from bullet import Bullet, FragmentationBullet, OrbitBullets, ExplosiveBullets
+from bullet import create_bullet
 from math import pi, sin, cos
 
 class Gun:
@@ -47,7 +47,7 @@ class Gun:
         n = randint(-10, 10)
         if n == 0: n = 1
         offset = self.offset/n
-        Bullet(groups, self.bullets_data, user_place, angle+offset, self.owner, self.damage)
+        create_bullet(groups, self.bullets_data, user_place, angle+offset, self.owner, self.damage)
 
     def fire(self, groups, user_place, angle):
         if not self.can_fire(): return
@@ -102,7 +102,7 @@ class Shotgun(Gun):
         self.one_shot = int((self.based_stats['number_of_bullets_in_one_shot']-1)//2)
     
     def add_bullet(self, groups: list[pygame.sprite.Group], user_place: tuple, angle: float) -> None:
-        Bullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
+        create_bullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
 
     def make_shots(self, groups, user_place, angle):
         self.add_bullet(groups, user_place, angle)
@@ -119,10 +119,6 @@ class GildedHydra(Shotgun):
         self.based_stats['ammo'] = max_hp - current_hp + 1
         _reload = self.based_stats['reload_time']/self.based_stats['ammo']
         self.can_add_bullet.time_long = _reload
-    
-class Railgun(Gun):
-    def make_shots(self, groups, user_place, angle):
-        for i in range(2): OrbitBullets(groups, self.bullets_data, user_place, angle, self.owner, self.damage, pi/2+i*pi-angle)
 
 class WallGun(Shotgun):
     def make_shots(self, groups, user_place, angle):
@@ -141,17 +137,13 @@ class WallGun(Shotgun):
 
 class IceBraker(Shotgun):
     def add_bullet(self, groups: list[pygame.sprite.Group], user_place: tuple, angle: float) -> None:
-        Bullet(groups, self.bullets_data[0], user_place, angle, self.owner, self.damage)
+        create_bullet(groups, self.bullets_data[0], user_place, angle, self.owner, self.damage)
 
     def make_shots(self, groups, user_place, angle):
         if self.current_ammo == 1:
-            ExplosiveBullets(groups, self.bullets_data[1], user_place, angle, self.owner, self.damage)
+            create_bullet(groups, self.bullets_data[1], user_place, angle, self.owner, self.damage)
         else:
             super().make_shots(groups, user_place, angle)
-
-class RocketLauncher(Gun):
-    def make_shots(self, groups, user_place, angle):
-        ExplosiveBullets(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
 
 class DoubleGun:
     def __init__(self, owner: Status, gun_data: dict, guns: list[Gun]) -> None:
@@ -208,12 +200,4 @@ class ShotgunM3(Shotgun):
     def make_shots(self, groups, user_place, angle):
         for n in range(self.one_shot):
             _angle = 2*pi*n/self.one_shot
-            OrbitBullets(groups, self.bullets_data, user_place, angle, self.owner, self.damage, _angle)
-
-class FragmentationGun(Gun):
-    def make_shots(self, groups, user_place, angle):
-        FragmentationBullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
-
-class FragmentationShotgun(Shotgun):
-    def add_bullet(self, groups, user_place, angle):
-        FragmentationBullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage)
+            create_bullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage, _angle)

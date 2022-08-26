@@ -13,9 +13,8 @@ class Button():
         self.text_rect = self.text.get_rect(center = (self.rect.center + pygame.Vector2(150, 0)))
     
     def is_mouse_in(self) -> bool:
-        mousex, mousey = pygame.mouse.get_pos()
-        if not mousex in range(self.rect.left, self.rect.right): return False
-        if not mousey in range(self.rect.top, self.rect.bottom): return False
+        mouse_pos = pygame.mouse.get_pos()
+        if not self.rect.collidepoint(mouse_pos): return False
         return True     
 
     def update(self):

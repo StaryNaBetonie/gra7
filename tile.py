@@ -1,5 +1,5 @@
 import pygame
-from support2 import get_rect
+from support2 import get_rect, generate_shadow
 from settings import ObjectType
 
 class Tile(pygame.sprite.Sprite):
@@ -14,7 +14,10 @@ class Tile(pygame.sprite.Sprite):
         self.rect = get_rect(self.image, pos)
         self.hitbox = self.rect.copy().inflate(hitbox_offset)
 
-        self.special_flag = self.get_special_flag()
+        self.special_flag = 0
     
-    def get_special_flag(self):
-        return pygame.BLEND_RGBA_MULT if self.object_type is ObjectType.shadow else 0
+class Shadow(Tile):
+    def __init__(self, groups, pos) -> None:
+        super().__init__(groups, generate_shadow(2.5), ObjectType.shadow, -1, (0, 0), topleft = pos)
+        self.hitbox = pygame.Rect(self.rect.topleft, (0, 0))
+        self.special_flag = pygame.BLEND_RGBA_MULT

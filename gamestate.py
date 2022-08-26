@@ -187,7 +187,7 @@ class Gamestate:
             for col_index, col in enumerate(row):
                 if col is not None:
                     tab = []
-                    
+                        
                     if col.place.y == 0:
                         tab.append(Border.top)
                     elif self.gamestate[row_index][col_index-1] is None:
