@@ -9,7 +9,7 @@ from tile import Tile
 
 class Enemy(Tile):
     def __init__(self, groups: list[pygame.sprite.Group], pos: tuple, gun: Gun, based_stats: dict, image: pygame.Surface) -> None:
-        super().__init__(groups, image, ObjectType.enemy, 0, (7, 7), topleft = pos)
+        super().__init__(groups, image, ObjectType.enemy, 0, (7, 7), center = pos)
         self.based_stats = based_stats
 
         self.gun = gun
@@ -113,8 +113,8 @@ class Enemy(Tile):
         self.acceleration = 0
     
     def update(self, game):
-        self.create_attack(game)
         self.get_direction(game.player.hitbox.center)
+        self.create_attack(game)
         self.rotate()
         self.move_logic(game)
         self.gun.update()

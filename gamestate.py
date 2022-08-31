@@ -50,7 +50,7 @@ class Gamestate:
         path = f'levels/{state_type}/'
         self._exit = {
             'walls': import_csv_layout(path+'exit/_walls.csv'),
-            'floor': import_csv_layout(path+'exit/_floor.csv')
+            'floor': import_csv_layout(path+'exit/_floor.csv'),
         }
 
         self._enter = {
@@ -82,22 +82,28 @@ class Gamestate:
 
         self.levels = [
             {'walls': import_csv_layout(path+'room1/_walls.csv'),
-            'floor': import_csv_layout(path+'room1/_floor.csv')},
+            'floor': import_csv_layout(path+'room1/_floor.csv'),
+            'spawn': import_csv_layout(path+'room1/_spawn.csv')},
 
             {'walls': import_csv_layout(path+'room2/_walls.csv'),
-            'floor': import_csv_layout(path+'room2/_floor.csv')},
+            'floor': import_csv_layout(path+'room2/_floor.csv'),
+            'spawn': import_csv_layout(path+'room2/_spawn.csv')},
 
             {'walls': import_csv_layout(path+'room3/_walls.csv'),
-            'floor': import_csv_layout(path+'room3/_floor.csv')},
+            'floor': import_csv_layout(path+'room3/_floor.csv'),
+            'spawn': import_csv_layout(path+'room3/_spawn.csv')},
 
             {'walls': import_csv_layout(path+'room4/_walls.csv'),
-            'floor': import_csv_layout(path+'room4/_floor.csv')},
+            'floor': import_csv_layout(path+'room4/_floor.csv'),
+            'spawn': import_csv_layout(path+'room4/_spawn.csv')},
 
             {'walls': import_csv_layout(path+'room5/_walls.csv'),
-            'floor': import_csv_layout(path+'room5/_floor.csv')},
+            'floor': import_csv_layout(path+'room5/_floor.csv'),
+            'spawn': import_csv_layout(path+'room5/_spawn.csv')},
 
             {'walls': import_csv_layout(path+'room6/_walls.csv'),
-            'floor': import_csv_layout(path+'room6/_floor.csv')},
+            'floor': import_csv_layout(path+'room6/_floor.csv'),
+            'spawn': import_csv_layout(path+'room6/_spawn.csv')},
         ]
     
     def kill_boss(self, groups):

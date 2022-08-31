@@ -14,6 +14,7 @@ class Room:
         self.active = active
         
         self.level = level
+        self.spawn_layer = [[[] for i in range(15)] for j in range(15)]
 
         self.place = pygame.math.Vector2(index)
         self.center = pygame.Vector2(TILE_SIZE * (self.place.x * 15 + 7.5), TILE_SIZE * (self.place.y * 15 + 7.5))
@@ -56,6 +57,9 @@ class Room:
                             else:
                                 floor_part_image = floor_graphics[index]
                             self.floor_surface.blit(floor_part_image, (col_index * TILE_SIZE, row_index * TILE_SIZE))
+                        
+                        elif style == 'spawn':
+                            self.spawn_layer[row_index][col_index].append('S')
 
     def set_active(self, player):
         player_place = (int(player.x/15/TILE_SIZE), int(player.y/15/TILE_SIZE))
