@@ -2,9 +2,9 @@ import pygame
 from black_screen import BlackScreen
 from player import Player
 from random import randint
-from gamestate import Gamestate
+from gamestate import Gamestate, DeepDark
 from ui import UI
-from settings import stage_data, LocationType
+from settings import StageType, stage_data, LocationType
 from grid import GridGroup
 
 class GamePlay:
@@ -35,17 +35,18 @@ class GamePlay:
         self.player = Player([self.visible_sprites], self.gamestate.set_player())
     
     def new_gamestate(self):
-        _stage_data = stage_data[self.stage_number%4]
+        _stage_data = stage_data[self.stage_number%5]
         self.static_objects.clear()
-        self.gamestate = Gamestate(self)
+        if _stage_data['stage_type'] is StageType.normal: self.gamestate = Gamestate(self)
+        else: self.gamestate = DeepDark(self)
         self.static_objects.add_list(self.walls.sprites())
         self.gamestate.mob_spawner.spawn(_stage_data['opponents'], _stage_data['bosses'])
 
     def render(self, screen):
         self.visible_sprites.custom_draw(self.player)
         self.player.gun.render(screen, self.player)
-        if self.player.moving_down:
-            self.black_screen.play(screen, self.new_level, self.player)
+        self.gamestate.render(screen)
+        if self.player.moving_down: self.black_screen.play(screen, self.new_level, self.player)
         self.ui.show_gun(self.player.gun.image_origin.copy(), screen)
         self.ui.show_gun_stats(screen, self.player.gun.damage, self.player.gun.based_stats['ammo'])
         self.ui.show_player_hp(self.player.hp, screen)
@@ -55,13 +56,12 @@ class GamePlay:
         self.ui.reload(screen, self.player)
 
     def kill_entity(self):
-        for item in self.items.sprites():
-            item.kill()
-        for enemy in self.enemies.sprites():
-            enemy.kill()
+        for item in self.items.sprites(): item.kill()
+        for enemy in self.enemies.sprites(): enemy.kill()
+        for bullet in self.bullets.sprites(): bullet.kill()
+        for floor in self.floor: floor.kill()
 
     def new_level(self):
-        for floor in self.floor: floor.kill()
         self.stage_number += 1
         self.kill_entity()
         self.gamestate.delete_gamestate()
@@ -97,4 +97,5 @@ class CustomCamera(pygame.sprite.Group):
 
         for sprite in sorted(self.sprites(), key = lambda sprite: (sprite._layer, sprite.rect.centery)):
             offset_pos = sprite.rect.topleft - self.offset
+            sprite.pos_on_screen = sprite.rect.center - self.offset
             self.display_surface.blit(sprite.image, offset_pos, special_flags = sprite.special_flag)

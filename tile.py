@@ -8,6 +8,7 @@ class Tile(pygame.sprite.Sprite):
         self._layer = layer
         self.object_type = object_type
         self.place_in_grid = []
+        self.pos_on_screen = (0, 0)
     
         self.image_origin = surface
         self.image = surface

@@ -201,3 +201,10 @@ class ShotgunM3(Shotgun):
         for n in range(self.one_shot):
             _angle = 2*pi*n/self.one_shot
             create_bullet(groups, self.bullets_data, user_place, angle, self.owner, self.damage, _angle)
+
+class LastBulletShotgunM3(ShotgunM3):
+    def make_shots(self, groups, user_place, angle):
+        bullet_data = self.bullets_data[1] if self.current_ammo == 1 else self.bullets_data[0]
+        for n in range(self.one_shot):
+            _angle = 2*pi*n/self.one_shot
+            create_bullet(groups, bullet_data, user_place, angle, self.owner, self.damage, _angle)

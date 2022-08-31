@@ -45,6 +45,7 @@ class ItemType(Enum):
     modifier = 9
     fragment_gun = 10
     fragment_shotgun = 11
+    shotgun_m3_last_bullet = 12
 
 class BulletType(Enum):
     normal = 1
@@ -69,6 +70,10 @@ class ObjectType(Enum):
 class ChestStatus(Enum):
     closed = 1
     opened = 2
+
+class StageType(Enum):
+    normal = 1
+    deepdark = 2
 
 @dataclass
 class colors:
@@ -97,36 +102,41 @@ class colors:
     seaweed_green = '#090716'
     blue_gray = '#1d1d21'
     crimson_background = '#2f0b00'
+    deepdark_keycolor = '#000706'
+    glowstone = '#ecd13e'
 
 bullets = [
     # player
-    {'id': 0, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 1, 'color': colors.light_blue, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 2, 'color': colors.light_blue, 'speed': 7, 'acceleration': 0.25, 'type': BulletType.explosive, 'size': (27, 27)},
-    {'id': 3, 'color': colors.orange, 'speed': 3, 'acceleration': 0.5, 'type': BulletType.explosive, 'size': (27, 27)},
-    {'id': 4, 'color': colors.dark_green, 'speed': 3, 'acceleration': 0.5, 'type': BulletType.explosive, 'size': (27, 27)},
-    {'id': 5, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/18, 'bullet_radius': 30},
-    {'id': 6, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 50},
-    {'id': 7, 'color': colors.orange, 'speed': 10, 'acceleration': 0.2, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/12, 'bullet_radius': 30},
-    {'id': 8, 'color': colors.lime_green, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 9, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0.1, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/18, 'bullet_radius': 30},
-    {'id': 10, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 30},
-    {'id': 11, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 12, 'color': colors.red_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/18, 'bullet_radius': 30},
-    {'id': 13, 'color': colors.red_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 14, 'color': colors.marble_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 15, 'color': colors.marble_gray, 'speed': 3, 'acceleration': 0.25, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 16, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 200},
-    {'id': 17, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 1, 'type': BulletType.normal, 'size': (15, 15)},
-    {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 4, 'bullets_inside_id': 0},
-    {'id': 19, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8, 'bullets_inside_id': 23},
-    {'id': 20, 'color': colors.white, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 30},
-    {'id': 21, 'color': colors.white, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (20, 20), 'bullets_inside': 4, 'bullets_inside_id': 14},
-    {'id': 22, 'color': colors.white, 'speed': 0, 'acceleration': 0, 'type': BulletType.normal, 'size': (32, 32)},
-    {'id': 23, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.normal, 'size': (11, 11)},
-    {'id': 24, 'color': colors.orange, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (31, 31), 'bullets_inside': 8, 'bullets_inside_id': 25},
-    {'id': 25, 'color': colors.orange, 'speed': 7, 'acceleration': 0, 'type': BulletType.fragment, 'size': (23, 23), 'bullets_inside': 16, 'bullets_inside_id': 26},
-    {'id': 26, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (17, 17)},
+    {'id': 0, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 1, 'color': colors.light_blue, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 2, 'color': colors.light_blue, 'speed': 7, 'acceleration': 0.25, 'type': BulletType.explosive, 'size': (27, 27), 'light_rad': 75},
+    {'id': 3, 'color': colors.orange, 'speed': 3, 'acceleration': 0.5, 'type': BulletType.explosive, 'size': (27, 27), 'light_rad': 75},
+    {'id': 4, 'color': colors.dark_green, 'speed': 3, 'acceleration': 0.5, 'type': BulletType.explosive, 'size': (27, 27), 'light_rad': 75},
+    {'id': 5, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/18, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 6, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 50, 'light_rad': 75},
+    {'id': 7, 'color': colors.orange, 'speed': 10, 'acceleration': 0.2, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/12, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 8, 'color': colors.lime_green, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 9, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0.1, 'type': BulletType.orbit, 'size': (15, 15), 'rotate_speed': pi/18, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 10, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': 0, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 11, 'color': colors.red_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 12, 'color': colors.red_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/18, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 13, 'color': colors.red_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 14, 'color': colors.marble_gray, 'speed': 15, 'acceleration': 0, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 15, 'color': colors.marble_gray, 'speed': 3, 'acceleration': 0.25, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 16, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 200, 'light_rad': 75},
+    {'id': 17, 'color': colors.marble_gray, 'speed': 10, 'acceleration': 1, 'type': BulletType.normal, 'size': (15, 15), 'light_rad': 75},
+    {'id': 18, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 4, 'bullets_inside_id': 0, 'light_rad': 75},
+    {'id': 19, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.fragment, 'size': (15, 15), 'bullets_inside': 8, 'bullets_inside_id': 23, 'light_rad': 75},
+    {'id': 20, 'color': colors.white, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/72, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 21, 'color': colors.white, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (20, 20), 'bullets_inside': 4, 'bullets_inside_id': 14, 'light_rad': 75},
+    {'id': 22, 'color': colors.white, 'speed': 0, 'acceleration': 0, 'type': BulletType.normal, 'size': (32, 32), 'light_rad': 75},
+    {'id': 23, 'color': colors.orange, 'speed': 10, 'acceleration': 0.5, 'type': BulletType.normal, 'size': (11, 11), 'light_rad': 75},
+    {'id': 24, 'color': colors.orange, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (31, 31), 'bullets_inside': 8, 'bullets_inside_id': 25, 'light_rad': 75},
+    {'id': 25, 'color': colors.orange, 'speed': 7, 'acceleration': 0, 'type': BulletType.fragment, 'size': (23, 23), 'bullets_inside': 16, 'bullets_inside_id': 26, 'light_rad': 75},
+    {'id': 26, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (17, 17), 'light_rad': 75},
+    {'id': 27, 'color': colors.glowstone, 'speed': 0, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/48, 'bullet_radius': 250, 'light_rad': 150},
+    {'id': 28, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/72, 'bullet_radius': 100, 'light_rad': 150},
+    {'id': 29, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': -pi/72, 'bullet_radius': 100, 'light_rad': 150},
 ]
 
 weapon = [
@@ -152,6 +162,7 @@ weapon = [
     {'name': 'Hegemony_Carbine', 'dmg': 40, 'ammo': 5, 'fire_rate': 1000, 'reload_time': 1500, 'offset': pi/24, 'path': 'graphics/guns/Hegemony_Carbine.png', 'item_type': ItemType.gun, 'bullets': bullets[18]},
     {'name': 'Thr_Emperor', 'dmg': 20, 'ammo': 10, 'fire_rate': 350, 'reload_time': 2000, 'offset': pi/12, 'number_of_bullets_in_one_shot': 3, 'path': 'graphics/guns/The_Emperor.png', 'item_type': ItemType.shotgun, 'bullets': bullets[19]},
     {'name': 'BSG', 'dmg': 150, 'ammo': 1, 'fire_rate': 0, 'reload_time': 3500, 'offset': 0, 'path': 'graphics/guns/BSG.png', 'item_type': ItemType.gun, 'bullets': bullets[24]},
+    {'name': 'bron_testowa', 'dmg': 5000, 'ammo': 100, 'fire_rate': 100, 'reload_time': 200, 'offset': 15, 'number_of_bullets_in_one_shot': 5, 'path': 'graphics/guns/bron_testowa.png', 'item_type': ItemType.wallgun, 'bullets': bullets[0]},
     # enemy guns
     # dungeon
     #19
@@ -176,43 +187,55 @@ weapon = [
     {'name': 'Enemy_Gun10', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[20]},
     {'name': 'Enemy_Gun11', 'dmg': 1, 'ammo': 3, 'fire_rate': 1500, 'reload_time': 2000, 'offset': pi/8, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun, 'bullets': bullets[21]},
     {'name': 'Enemy_Gun12', 'dmg': 1, 'ammo': 15, 'fire_rate': 250, 'reload_time': 4500, 'offset': 0, 'path': None, 'item_type': ItemType.gun, 'bullets': bullets[22]},
+    {},
+    {},
+    #deepdark
+    {},
+    {},
+    {},
+    {'name': 'Boss_gun9', 'dmg': 1, 'ammo': 5, 'fire_rate': 1500, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 2, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[27]},
+    {'name': 'Boss_gun10', 'dmg': 1, 'ammo': 2, 'fire_rate': 0, 'reload_time': 2500, 'offset': 0, 'number_of_bullets_in_one_shot': 6, 'path': None, 'item_type': ItemType.shotgun_m3_last_bullet, 'bullets': (bullets[28], bullets[29])},
 ]
 
 opponents = [
     # dungeon
-    {'hp': 50, 'color': colors.white, 'weapon': 22, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 100, 'color': colors.crimson, 'weapon': 23, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 100, 'color': colors.navy_blue, 'weapon': 24, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 50, 'color': colors.white, 'weapon': 23, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.crimson, 'weapon': 24, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.navy_blue, 'weapon': 25, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     # abyss
-    {'hp': 100, 'color': colors.dirty_green, 'weapon': 27, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 150, 'color': colors.dirty_blue, 'weapon': 28, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 150, 'color': colors.sea_green, 'weapon': 29, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 100, 'color': colors.dirty_green, 'weapon': 28, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.dirty_blue, 'weapon': 29, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.sea_green, 'weapon': 30, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     # cave
-    {'hp': 150, 'color': colors.white, 'weapon': 32, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 200, 'color': colors.golden, 'weapon': 33, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 200, 'color': colors.dark_gray, 'weapon': 34, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': colors.white, 'weapon': 33, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 200, 'color': colors.golden, 'weapon': 34, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 200, 'color': colors.dark_gray, 'weapon': 35, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 
-    {'hp': 150, 'color': '#6f6f6f', 'weapon': 37, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 300, 'color': colors.golden, 'weapon': 38, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 350, 'color': '#6f0000', 'weapon': 39, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 150, 'color': '#6f6f6f', 'weapon': 38, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 300, 'color': colors.golden, 'weapon': 39, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 350, 'color': '#6f0000', 'weapon': 40, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 ]
 
 bosses = [
     # dungeon
-    {'hp': 2500, 'weapons': [25, 26], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'brimstone_elemental'},
+    {'hp': 2500, 'weapons': [26, 27], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'brimstone_elemental'},
     # abyss
-    {'hp': 3000, 'weapons': [30, 31], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'name': 'paguebringer'},
+    {'hp': 3000, 'weapons': [31, 32], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'name': 'paguebringer'},
     # cave
-    {'hp': 4000, 'weapons': [35, 36], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'crabulon'},
-
-    {'hp': 6000, 'weapons': [35, 36], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'providence'},
+    {'hp': 4000, 'weapons': [36, 37], 'notice_rad': 1100, 'speed': 2, 'can_knock': False, 'name': 'crabulon'},
+    # crimson
+    {'hp': 6000, 'weapons': [36, 37], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'providence'},
+    # deepdark
+    {'hp': 6500, 'weapons': [46, 47], 'notice_rad': 1100, 'speed': 2, 'can_knock': False, 'name': 'Ceaseless_Void'},
 ]
 
 stage_data = [
-    {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': 0},
-    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': 1},
-    {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': 2},
-    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3},
+    {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': 0, 'stage_type': StageType.normal},
+    {'name': 'deepdark', 'key_color': colors.deepdark_keycolor, 'opponents': [9, 10, 11], 'bosses': 4, 'stage_type': StageType.deepdark},
+    {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': 1, 'stage_type': StageType.normal},
+    {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': 2, 'stage_type': StageType.normal},
+    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3, 'stage_type': StageType.normal},
+    {'name': 'deepdark', 'key_color': colors.deepdark_keycolor, 'opponents': [9, 10, 11], 'bosses': 4, 'stage_type': StageType.deepdark},
 ]
 
 item_range = {

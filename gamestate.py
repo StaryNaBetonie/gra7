@@ -1,7 +1,8 @@
 import pygame
 from random import randint, choice
+from darkness import Darkness
 from room import Room, BossRoom
-from settings import ObjectType, RoomType, Border, TILE_SIZE, stage_data
+from settings import ObjectType, RoomType, Border, TILE_SIZE, stage_data, StageType
 from mob_spawner import MobSpawner
 from tile import Tile
 from raiseable import RaiseableItem
@@ -233,7 +234,9 @@ class Gamestate:
                         place = col.center
                         image = import_graphics('graphics/stairs.png')
                         self.exit = Tile(groups, image, ObjectType.stairs, -1, (0, 0), center = place)
-
+    
+    def render(self, window):
+        pass
     
     def update(self, player):
         for row in self.gamestate:
@@ -245,3 +248,11 @@ class Gamestate:
         for wall in self.gameplay.walls: wall.kill()
         for chest in self.gameplay.chests: chest.kill()
         self.exit.kill()
+
+class DeepDark(Gamestate):
+    def __init__(self, gameplay) -> None:
+        super().__init__(gameplay)
+        self.darkness = Darkness(self.gameplay)
+    
+    def render(self, window):
+        self.darkness.render(window)

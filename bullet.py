@@ -22,6 +22,7 @@ class Bullet(Tile):
         super().__init__(groups, get_surface(based_stats['size'], based_stats['color']), ObjectType.bullet, 2, (0, 0), center = pos)
         self.based_stats = based_stats
 
+        self.light_rad = self.based_stats['light_rad']
         self.bullet_type = self.based_stats['type']
         self.status = status
         self.damage = damage
