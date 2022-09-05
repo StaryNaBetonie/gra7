@@ -1,5 +1,6 @@
 import pygame
 from bullet import Bullet
+from cooldown import Cooldown
 
 class Darkness:
     def __init__(self, gameplay) -> None:
@@ -7,16 +8,22 @@ class Darkness:
         self.player = gameplay.player
         self.light_sources = []
 
+        self.start_time = pygame.time.get_ticks()
+
+
         self.surface = pygame.Surface((1920, 1080))
         rect = pygame.Rect(2000, 0, 50, 50)
         pygame.draw.rect(self.surface, ('white'), rect)
 
     def render(self, window):
-        self.surface.fill('black')
-        self.dynamic_light(self.gameplay.bullets.sprites())
-        self.render_light(self.player.pos_on_screen, 200)
-        self.correct()
-        window.blit(self.surface, (0, 0), special_flags = pygame.BLEND_RGBA_MULT)
+        current_time = pygame.time.get_ticks()
+        if current_time - self.start_time >= 10:
+            self.start_time = pygame.time.get_ticks()
+            self.surface.fill('black')
+            self.dynamic_light(self.gameplay.bullets.sprites())
+            self.render_light(self.player.pos_on_screen, 200)
+            self.correct()
+            window.blit(self.surface, (0, 0), special_flags = pygame.BLEND_RGBA_MULT)
     
     def render_light(self, center, rad):
         color = 0

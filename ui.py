@@ -15,7 +15,7 @@ class UI:
     
     def show_player_ammo(self, ammo, window):
         offset = 0
-        for i in range(ammo):
+        for i in range(min(55, ammo)):
             rect = pygame.Rect(1880, 1000-offset, 13, 13)
             pygame.draw.rect(window, (250, 130, 30), rect)
             offset += rect.height + 5

@@ -1,4 +1,5 @@
 from enum import Enum
+from json.encoder import INFINITY
 from math import pi
 from dataclasses import dataclass
 
@@ -134,9 +135,17 @@ bullets = [
     {'id': 24, 'color': colors.orange, 'speed': 5, 'acceleration': 0, 'type': BulletType.fragment, 'size': (31, 31), 'bullets_inside': 8, 'bullets_inside_id': 25, 'light_rad': 75},
     {'id': 25, 'color': colors.orange, 'speed': 7, 'acceleration': 0, 'type': BulletType.fragment, 'size': (23, 23), 'bullets_inside': 16, 'bullets_inside_id': 26, 'light_rad': 75},
     {'id': 26, 'color': colors.orange, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (17, 17), 'light_rad': 75},
-    {'id': 27, 'color': colors.glowstone, 'speed': 0, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/48, 'bullet_radius': 250, 'light_rad': 150},
-    {'id': 28, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/72, 'bullet_radius': 100, 'light_rad': 150},
-    {'id': 29, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': -pi/72, 'bullet_radius': 100, 'light_rad': 150},
+    {'id': 27, 'color': colors.glowstone, 'speed': 0, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/48, 'bullet_radius': 320, 'light_rad': 150},
+    {'id': 28, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': pi/48, 'bullet_radius': 100, 'light_rad': 150},
+    {'id': 29, 'color': colors.glowstone, 'speed': 12, 'acceleration': 0, 'type': BulletType.orbit, 'size': (17, 17), 'rotate_speed': -pi/48, 'bullet_radius': 100, 'light_rad': 150},
+    {'id': 30, 'color': colors.glowstone, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': pi/48, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 31, 'color': colors.glowstone, 'speed': 10, 'acceleration': 0, 'type': BulletType.orbit, 'size': (11, 11), 'rotate_speed': -pi/48, 'bullet_radius': 30, 'light_rad': 75},
+    {'id': 32, 'color': colors.glowstone, 'speed': 12, 'acceleration': -0.3, 'type': BulletType.normal, 'size': (21, 21), 'light_rad': 125},
+    {'id': 33, 'color': colors.glowstone, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (15, 15), 'light_rad': 75},
+    {'id': 34, 'color': colors.white, 'speed': 15, 'acceleration': -0.2, 'type': BulletType.normal, 'size': (13, 13), 'light_rad': 75},
+    {'id': 35, 'color': colors.white, 'speed': 3, 'acceleration': 0.2, 'type': BulletType.fragment, 'size': (31, 31), 'bullets_inside': 4, 'bullets_inside_id': 36, 'light_rad': 75},
+    {'id': 36, 'color': colors.white, 'speed': 7, 'acceleration': 0, 'type': BulletType.fragment, 'size': (23, 23), 'bullets_inside': 16, 'bullets_inside_id': 37, 'light_rad': 75},
+    {'id': 37, 'color': colors.white, 'speed': 10, 'acceleration': 0, 'type': BulletType.normal, 'size': (17, 17), 'light_rad': 75},
 ]
 
 weapon = [
@@ -162,7 +171,7 @@ weapon = [
     {'name': 'Hegemony_Carbine', 'dmg': 40, 'ammo': 5, 'fire_rate': 1000, 'reload_time': 1500, 'offset': pi/24, 'path': 'graphics/guns/Hegemony_Carbine.png', 'item_type': ItemType.gun, 'bullets': bullets[18]},
     {'name': 'Thr_Emperor', 'dmg': 20, 'ammo': 10, 'fire_rate': 350, 'reload_time': 2000, 'offset': pi/12, 'number_of_bullets_in_one_shot': 3, 'path': 'graphics/guns/The_Emperor.png', 'item_type': ItemType.shotgun, 'bullets': bullets[19]},
     {'name': 'BSG', 'dmg': 150, 'ammo': 1, 'fire_rate': 0, 'reload_time': 3500, 'offset': 0, 'path': 'graphics/guns/BSG.png', 'item_type': ItemType.gun, 'bullets': bullets[24]},
-    {'name': 'bron_testowa', 'dmg': 5000, 'ammo': 100, 'fire_rate': 100, 'reload_time': 200, 'offset': 15, 'number_of_bullets_in_one_shot': 5, 'path': 'graphics/guns/bron_testowa.png', 'item_type': ItemType.wallgun, 'bullets': bullets[0]},
+    {'name': 'bron_testowa', 'dmg': INFINITY, 'ammo': INFINITY, 'fire_rate': 100, 'reload_time': 200, 'offset': 15, 'number_of_bullets_in_one_shot': 5, 'path': 'graphics/guns/bron_testowa.png', 'item_type': ItemType.wallgun, 'bullets': bullets[0]},
     # enemy guns
     # dungeon
     #19
@@ -183,18 +192,18 @@ weapon = [
     {'name': 'Enemy_Gun9', 'dmg': 1, 'ammo': 15, 'fire_rate': 600, 'reload_time': 5000, 'offset': pi/12, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun, 'bullets': bullets[15]},
     {'name': 'Boss_gun5', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 32, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[16]},
     {'name': 'Boss_gun6', 'dmg': 1, 'ammo': 8, 'fire_rate': 450, 'reload_time': 2000, 'offset': 0, 'number_of_bullets_in_one_shot': 11, 'path': None, 'item_type': ItemType.wallgun, 'bullets': bullets[17]},
+     #deepdark
+    {'name': 'Enemy_Gun13', 'dmg': 1, 'ammo': 1, 'fire_rate': 0, 'reload_time': 2500, 'offset': 0, 'number_of_bullets_in_one_shot': 1, 'path': None, 'item_type': ItemType.shotgun_m3_last_bullet, 'bullets': (bullets[30], bullets[31])},
+    {'name': 'Enemy_Gun14', 'dmg': 1, 'ammo': 5, 'fire_rate': 1000, 'reload_time': 2500, 'offset': pi/16, 'path': None, 'item_type': ItemType.gun, 'bullets': bullets[32]},
+    {'name': 'Enemy_Gun15', 'dmg': 1, 'ammo': 7, 'fire_rate': 700, 'reload_time': 3900, 'offset': 10, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.wallgun, 'bullets': bullets[33]},
+    {'name': 'Boss_gun9', 'dmg': 1, 'ammo': 2, 'fire_rate': 1500, 'reload_time': 4500, 'offset': 0, 'number_of_bullets_in_one_shot': 5, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[27]},
+    {'name': 'Boss_gun10', 'dmg': 1, 'ammo': 3, 'fire_rate': 2000, 'reload_time': 3200, 'offset': 0, 'number_of_bullets_in_one_shot': 6, 'path': None, 'item_type': ItemType.shotgun_m3_last_bullet, 'bullets': (bullets[28], bullets[29])},
     #crimson
     {'name': 'Enemy_Gun10', 'dmg': 1, 'ammo': 5, 'fire_rate': 1200, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[20]},
     {'name': 'Enemy_Gun11', 'dmg': 1, 'ammo': 3, 'fire_rate': 1500, 'reload_time': 2000, 'offset': pi/8, 'number_of_bullets_in_one_shot': 3, 'path': None, 'item_type': ItemType.shotgun, 'bullets': bullets[21]},
     {'name': 'Enemy_Gun12', 'dmg': 1, 'ammo': 15, 'fire_rate': 250, 'reload_time': 4500, 'offset': 0, 'path': None, 'item_type': ItemType.gun, 'bullets': bullets[22]},
-    {},
-    {},
-    #deepdark
-    {},
-    {},
-    {},
-    {'name': 'Boss_gun9', 'dmg': 1, 'ammo': 5, 'fire_rate': 1500, 'reload_time': 3000, 'offset': 0, 'number_of_bullets_in_one_shot': 2, 'path': None, 'item_type': ItemType.shotgun_m3, 'bullets': bullets[27]},
-    {'name': 'Boss_gun10', 'dmg': 1, 'ammo': 2, 'fire_rate': 0, 'reload_time': 2500, 'offset': 0, 'number_of_bullets_in_one_shot': 6, 'path': None, 'item_type': ItemType.shotgun_m3_last_bullet, 'bullets': (bullets[28], bullets[29])},
+    {'name': 'Boss_gun11', 'dmg': 1, 'ammo': 3, 'fire_rate': 1400, 'reload_time': 4000, 'offset': pi/16, 'number_of_bullets_in_one_shot': 32, 'path': None, 'item_type': ItemType.shotgun, 'bullets': bullets[34]},
+    {'name': 'Boss_gun12', 'dmg': 1, 'ammo': 1, 'fire_rate': 0, 'reload_time': 4500, 'offset': 0, 'path': None, 'item_type': ItemType.gun, 'bullets': bullets[35]},
 ]
 
 opponents = [
@@ -210,10 +219,14 @@ opponents = [
     {'hp': 150, 'color': colors.white, 'weapon': 33, 'notice_rad': 1100, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     {'hp': 200, 'color': colors.golden, 'weapon': 34, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
     {'hp': 200, 'color': colors.dark_gray, 'weapon': 35, 'notice_rad': 700, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-
-    {'hp': 150, 'color': '#6f6f6f', 'weapon': 38, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 300, 'color': colors.golden, 'weapon': 39, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
-    {'hp': 350, 'color': '#6f0000', 'weapon': 40, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    # deepdark
+    {'hp': 200, 'color': '#83886c', 'weapon': 38, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 220, 'color': '#425a70', 'weapon': 39, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 300, 'color': '#29dfeb', 'weapon': 40, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    # crimson
+    {'hp': 150, 'color': '#6f6f6f', 'weapon': 43, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 300, 'color': colors.golden, 'weapon': 44, 'notice_rad': 900, 'speed': 7, 'can_knock': True, 'size': (35, 35)},
+    {'hp': 350, 'color': '#6f0000', 'weapon': 45, 'notice_rad': 900, 'speed': 5, 'can_knock': True, 'size': (35, 35)},
 ]
 
 bosses = [
@@ -223,19 +236,18 @@ bosses = [
     {'hp': 3000, 'weapons': [31, 32], 'notice_rad': 1100, 'speed': 4, 'can_knock': False, 'name': 'paguebringer'},
     # cave
     {'hp': 4000, 'weapons': [36, 37], 'notice_rad': 1100, 'speed': 2, 'can_knock': False, 'name': 'crabulon'},
-    # crimson
-    {'hp': 6000, 'weapons': [36, 37], 'notice_rad': 1100, 'speed': 3, 'can_knock': False, 'name': 'providence'},
     # deepdark
-    {'hp': 6500, 'weapons': [46, 47], 'notice_rad': 1100, 'speed': 2, 'can_knock': False, 'name': 'Ceaseless_Void'},
+    {'hp': 6500, 'weapons': [41, 42], 'notice_rad': 1100, 'speed': 2, 'can_knock': False, 'name': 'Ceaseless_Void'},
+    # crimson
+    {'hp': 6000, 'weapons': [46, 47], 'notice_rad': 1100, 'speed': 0, 'can_knock': False, 'name': 'providence'},
 ]
 
 stage_data = [
     {'name': 'dungeon', 'key_color': colors.dark_brown, 'opponents': [0, 1, 2], 'bosses': 0, 'stage_type': StageType.normal},
-    {'name': 'deepdark', 'key_color': colors.deepdark_keycolor, 'opponents': [9, 10, 11], 'bosses': 4, 'stage_type': StageType.deepdark},
     {'name': 'abyss', 'key_color': colors.seaweed_green, 'opponents': [3, 4, 5], 'bosses': 1, 'stage_type': StageType.normal},
     {'name': 'cave', 'key_color': colors.blue_gray, 'opponents': [6, 7, 8], 'bosses': 2, 'stage_type': StageType.normal},
-    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [9, 10, 11], 'bosses': 3, 'stage_type': StageType.normal},
-    {'name': 'deepdark', 'key_color': colors.deepdark_keycolor, 'opponents': [9, 10, 11], 'bosses': 4, 'stage_type': StageType.deepdark},
+    {'name': 'deepdark', 'key_color': colors.deepdark_keycolor, 'opponents': [9, 10, 11], 'bosses': 3, 'stage_type': StageType.deepdark},
+    {'name': 'crimson', 'key_color': colors.crimson_background, 'opponents': [12, 13, 14], 'bosses': 4, 'stage_type': StageType.normal},
 ]
 
 item_range = {

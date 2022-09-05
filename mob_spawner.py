@@ -31,7 +31,7 @@ class MobSpawner:
                     if room_col.room_type == RoomType.boss:
                         x = room_col.topright.center.x
                         y = room_col.topright.center.y
-                        if boss_index == 3:
+                        if boss_index == 4:
                             x = room_col.center.x * TILE_SIZE
                             y = room_col.center.y * TILE_SIZE
                         boss = bosses[boss_index]
