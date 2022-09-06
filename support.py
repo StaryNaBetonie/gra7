@@ -4,6 +4,7 @@ from os import walk
 from random import randint
 from settings import TILE_SIZE, BulletType, ObjectType
 from tile import Tile
+import datetime
 
 def import_csv_layout(path):
     terrain_map = []
@@ -53,4 +54,11 @@ def import_graphics(path):
 def add_tile(groups, pos, image):
     Tile(groups, image, ObjectType.wall, 0, (0, -10), topleft = pos)
 
+def add_date_to_text_file():
+    ct = datetime.datetime.now()
+    file = open('number_of_games.txt', 'a')
+
+    file.write('\n')
+    file.write('date: ' + f'{ct.day, ct.month, ct.year}' + '\n')
+    file.write('time: ' + f'{ct.hour, ct.minute, ct.second}' + '\n')
 

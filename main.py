@@ -3,6 +3,7 @@ from controls_loop import ControlsLoop
 from credits_loop import CreditsLoop
 from gameplay_loop import GameplyLoop
 from menu_loop import MenuLoop
+from support import add_date_to_text_file
 
 class Game:
     def __init__(self) -> None:
@@ -37,5 +38,6 @@ class Game:
             self.current_loop.render()
             
 if __name__ == '__main__':
+    add_date_to_text_file()
     game = Game()
     game.main_loop()
